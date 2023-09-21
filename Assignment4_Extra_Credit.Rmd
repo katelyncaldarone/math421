@@ -1,0 +1,248 @@
+
+---
+output: # rmarkdown::github_document
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 4 - Extra Credits"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment4_extra_credits.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- Notice that if there is `eval=FALSE` in the first line of the code chunk, the chunk will not be execute.
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+-------
+
+This assignment works with the [IMDB Top 1000 data](../data/imdb_top_1000.csv).  Find out more information about this data at [this link](https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows).  Import the data and answer the following questions. 
+
+```{r}
+#Import tidyverse package
+library(tidyverse)
+
+#Import the data set 
+setwd('C:\\Users\\student\\OneDrive - Bryant University\\2023-2024\\Semester 1\\MATH421-A Statistical Analysis with R\\Data')
+df <- read_csv('imdb_top_1000.csv')
+str(df)
+```
+
+1. List all the names of the columns of the data
+```{r}
+colnames(df)
+```
+
+
+2. Which movies have the highest money earned (Gross)?
+```{r}
+df %>%
+  group_by(Series_Title) %>%
+  summarise(highestGrossEarnings = max(Gross)) %>%
+  arrange(-highestGrossEarnings)
+```
+
+
+3. What is the lowest rating (IMDB_Rating)?  List five movies have this lowest rating.
+```{r}
+df %>%
+  group_by(Series_Title) %>%
+  summarise(lowestRating = min(IMDB_Rating))%>%
+  arrange(lowestRating)
+
+#5 movies with this lowest rating include 21 Grams, 25th Hour, 28 Days Later..., 300, 50/50.
+```
+
+4. Which year have the most number of movies released in the list?  What is the total of money earned on that year?
+```{r}
+#2014 has the most number of movies released in the list.
+df %>%
+  group_by(Released_Year) %>%
+  count() %>% 
+  arrange(-n)
+
+#total money earned in 2014
+df %>%
+  filter(Released_Year == '2014') %>%
+  summarize(Total_Earnings = sum(Gross, na.rm=TRUE))
+```
+
+
+5. What is the total money earned per movies on average?
+```{r}
+df %>%
+  summarise(Average_Earnings = mean(Gross, na.rm = TRUE))
+```
+
+
+6. Calculate the average number of votes by year. Calculate the average number of votes of movies that have IMDB rating greater than 9.
+```{r}
+#Average number of votes by year:
+df %>%
+  group_by(Released_Year) %>%
+  summarise(Average_Votes = mean(No_of_Votes, na.rm = TRUE))
+
+df %>%
+  filter(IMDB_Rating > 9) %>%
+  summarise(averageVotes_highRating = mean(No_of_Votes, na.rm = TRUE))
+```
+
+
+7. Calculate the average Meta score in 2020 of movies that have number of votes in the third quartile. 
+```{r}
+#third quartile of votes 
+votesQ3 <- quantile(df$No_of_Votes, 0.75, na.rm = TRUE)
+votesQ3
+
+#average Meta score in 2020 of movies w/ number of votes in Q3
+df %>% 
+  filter(Released_Year == 2020, No_of_Votes >= votesQ3) %>%
+  summarise(Average_Meta_Score_2020 = mean(Meta_score, na.rm = TRUE))
+
+
+#No movies meet the specified criteria, thus, we get a NaN result when calculate the average Meta score in 2020 of movies w/ number of votes in Q3.
+```
+
+
+8. (Optional - Challenging). The current `Runtime` variable is not a numeric. Use the `str_remove` function to remove ` min` from the variables then use `as.numeric` to convert the variable to numeric. Calculate the average running time in the 2010s. Calculate the correlation between running time and rating (adding `use="complete.obs"` in the `cor` function to ignore the missing values).  
+```{r}
+
+library(tidyverse)
+
+# Remove " min" from the Runtime variable and convert it to numeric
+df$Runtime <- as.numeric(str_remove(df$Runtime, " min"))
+
+# Filter the data for the 2010s
+df_2010s <- df %>%
+  filter(Released_Year >= 2010 & Released_Year <= 2019)
+
+# Calculate the average running time in the 2010s
+average_running_time_2010s <- mean(df_2010s$Runtime, na.rm = TRUE)
+average_running_time_2010s 
+
+# Calculate the correlation between running time and rating, ignoring missing values
+correlation <- cor(df$Runtime, df$IMDB_Rating, use = "complete.obs")
+correlation
+
+```
+
+
+9. We can use `select_if` to select columns satisfying a condition and use `summarise_if` to do calculation on columns satisfying a condition.  Try the follows to understand these functions. 
+
+```{r,eval=FALSE}
+# Select only character columns
+df %>% select_if(is.character)
+
+# Calculate the median of all numeric columns
+df %>% summarise_if(is.numeric, mean, na.rm=TRUE)
+```
+
+
+10. Implement the follows functions or combos. Drawing a comment or summary from each calculation. The codes in this question should be different from the codes used in other questions.
+
+- select
+```{r}
+#The following code creates a data frame containing only the variables IMDB_Rating and Gross while excluding the other variables within the original data set.
+df %>% select(IMDB_Rating, Gross)
+```
+
+- filter
+
+```{r}
+df %>% filter(Director == 'Tim Burton')
+
+#This code filters out the three movies directed by Tim Burton in this dataset.
+```
+
+- mutate
+```{r}
+df %>%
+  group_by(Director) %>%
+  mutate(Average_Score_By_Director = mean(Meta_score))
+
+#This code creates a new variable that calcualte average meta score by movie director
+```
+
+- summarise
+```{r}
+df %>% summarise(meanRuntime = mean(Runtime, na.rm=TRUE), 
+                 minRuntime = min(Runtime, na.rm=TRUE), 
+                 maxRuntime =max(Runtime, na.rm=TRUE))
+
+#This code shows the average running time of all movies in the data set which is 122.891 minutes, the movies with the shortest run time of 45 minutes and the movie with the longest run time of 321 minutes.
+```
+
+- arrange
+```{r}
+df %>% arrange(-df$Runtime)
+
+#This code arranges the Runtimes of the movies in this dataset from longest to shortest. Thus, we can see the movie with the longest runtime in this dataset is Gangs of Wasseypur.
+```
+
+- count
+```{r}
+df %>% count(df$Director)
+
+#This code offers the opportunity to assess the number of movies a given director directed within this dataset. For example, we can see Director Akira Kurosawa directed 10 movies within this dataset.
+```
+
+- count + arrange
+```{r}
+df %>%
+  count(Genre) %>%
+  arrange(-n)
+
+#This code shows that the most common Genre of movies within this dataset is drama (n=85).
+```
+
+- filter + count + arrange
+```{r}
+df %>%
+  filter(Director == "Tim Burton") %>%
+  count(No_of_Votes) %>%
+  arrange(-No_of_Votes)
+
+#This code shows the movies directed by Tim Burtonm that have received varying numbers of votes and sorts them in descending order by vote count.
+```
+
+- group_by + summarise
+```{r}
+df %>%
+  group_by(df$Certificate) %>%
+  summarise(meanNumberVotes = mean(No_of_Votes))
+
+#From this code, we can identify that movies with the Certificate Rating of UA receive the highest average number of votes 439032.58 when compared to the other listed Certificate Ratings.
+```
+
+- filter + group_by + summarise
+```{r}
+df %>% 
+  filter(Meta_score> 50) %>% 
+  group_by(Genre) %>% 
+  summarise(medianMetaScore = median(Meta_score, na.rm = TRUE))
+
+#This code enables assessment of the distribution of Meta Scores within the different movie genres that fit the criteria of a Meta Score greater than 50. This is useful as we can use this data to view genres with higher and lower meta scores to evaluate critical reception to movies within a specified genre.
+```
+
+- filter + group_by + summarise + arrange
+```{r}
+df %>% 
+  filter(df$Gross > 30000000) %>% 
+  group_by(Genre) %>% 
+  summarise(averageGrossIncome = mean(Gross)) %>% 
+  arrange(-averageGrossIncome)
+
+#The code filters for films with a gross income greater than $30,000,000 and groups the data by corresponding genre. Within each genre, average gross income is calculated. The genre Family, Sci-Fi has the highest average gross income of $435,110,554.
+```
+
