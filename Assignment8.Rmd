@@ -1,0 +1,115 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 8: Visualization - Making a bar race"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment8.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+-------
+
+1. Install two packages `gganimate` and `gifski` then restart Rstudio. Using the `Adult Census Income` data, make an animation using `geom_point` and `transition_states`.
+```{r}
+#install.packages('ggamimate')
+#stall.packages('gifski')
+
+#load required packages
+library(gganimate)
+library(gifski)
+library(ggplot2)
+library(tidyverse)
+library(knitr)
+library(lubridate)
+
+#read the data
+df <- read_csv('adult_census.csv')
+```
+```{r}
+df %>% 
+  filter(sex %in% c("Male", "Female")) %>%
+  ggplot(aes(x = age,
+           y = fnlwgt, color=income, na.rm = TRUE))+
+  geom_point()+
+  transition_states(sex)+
+  labs(x='Age', y = 'Final Weight', title = 'Sex: {closest_state}')
+```
+
+
+2. Using the `Adult Census Income` data, make an animation using `geom_bar` and `transition_states`.
+```{r}
+df %>% 
+  filter(sex %in% c("Male", "Female")) %>%
+  ggplot(aes(x = sex,
+                  fill= income))+
+  geom_bar(position = 'fill')+
+  transition_states(education.num) +
+  labs(x='Sex', y = 'Income', title = 'Years of Education: {closest_state}')
+```
+
+
+3. Use the WHO's dataset at [this link](https://covid19.who.int/WHO-COVID-19-global-data.csv). Make a top-10 bar race by months between countries on the number of deaths by Covid 19 in 2021.
+```{r}
+df <- read_csv('https://covid19.who.int/WHO-COVID-19-global-data.csv')
+df <- df %>% mutate(Date_reported = as.Date(Date_reported)) %>%
+  filter(year(Date_reported) == 2021)
+
+library(lubridate)
+df$Month <- month(df$Date_reported)
+
+d1 <- df %>% group_by(Month, Country) %>% summarise(mean = mean(New_deaths))
+d2 <- d1 %>% group_by(Month) %>% mutate(rank=rank(-mean)) 
+d3 <- d2 %>% filter(rank <= 10)
+a1 <- d3 %>% ggplot(aes(x=rank, y=mean, group=Country, fill=Country, label=Country)) + geom_col()+
+    geom_text(aes(y = mean, label = Country), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Month {closest_state}', x='', y='Deaths', fill='Country')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(Month)+
+    ease_aes("cubic-in-out")
+animate(a1, nframes = 400)
+```
+
+
+4. Make a bar race using a dataset of your own interest. You may use the dataset that we use in class (https://covidtracking.com/data/download/all-states-history.csv) but you should make a different bar race from ones in the slides. 
+```{r}
+df <- read_csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations-by-manufacturer.csv')
+
+df <- df %>%  mutate(date = as.Date(date))
+
+#library(lubridate)
+df$Month <- month(df$date)
+d1 <- df %>% group_by(Month, vaccine) %>% summarise(mean = mean(total_vaccinations))
+d2 <- d1 %>% group_by(Month) %>% mutate(rank=rank(-mean)) 
+d3 <- d2 %>% filter(rank <= 10)
+a1 <- d3 %>% ggplot(aes(x=rank, y=mean, group=vaccine, fill=vaccine, label=vaccine)) + geom_col()+
+    geom_text(aes(y = mean, label = vaccine), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Month {closest_state}', x='', y='Average Covid19 Vaccines Administered', fill='Vaccine')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(Month)+
+    ease_aes("cubic-in-out")
+animate(a1, nframes = 400)
+```
+
