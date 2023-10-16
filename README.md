@@ -18,6 +18,7 @@
 - [Assignment 9](Assignment9.html)
 - [Assignment 9 - Extra Credit](Assignment9_Extra_Credit.html)
 - [Assignment 10](Assignment10.html)
+- [Assignment 11](Assignment11.html)
 
 ### Plots
 - [Link to Assignment 7 Plot](Race_by_Gender.png)
