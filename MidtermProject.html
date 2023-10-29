@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>MATH 421 - Midterm Projects: RI Hospital Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="MidtermProject_files/libs/clipboard/clipboard.min.js"></script>
+<script src="MidtermProject_files/libs/quarto-html/quarto.js"></script>
+<script src="MidtermProject_files/libs/quarto-html/popper.min.js"></script>
+<script src="MidtermProject_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="MidtermProject_files/libs/quarto-html/anchor.min.js"></script>
+<link href="MidtermProject_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="MidtermProject_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="MidtermProject_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="MidtermProject_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="MidtermProject_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#instruction" id="toc-instruction" class="nav-link active" data-scroll-target="#instruction">Instruction</a></li>
+  <li><a href="#i.-data-wrangling" id="toc-i.-data-wrangling" class="nav-link" data-scroll-target="#i.-data-wrangling">I. Data Wrangling</a></li>
+  <li><a href="#ii.-data-visualization" id="toc-ii.-data-visualization" class="nav-link" data-scroll-target="#ii.-data-visualization">II. Data Visualization</a></li>
+  <li><a href="#iii.-predictive-models" id="toc-iii.-predictive-models" class="nav-link" data-scroll-target="#iii.-predictive-models">III. Predictive Models</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">MATH 421 - Midterm Projects: RI Hospital Data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="instruction" class="level2">
+<h2 class="anchored" data-anchor-id="instruction">Instruction</h2>
+<p>The midterm has two components: the Rmarkdown notebook (html) and the presentation. We will do the presentation in class. Post both the notebook and the presentation on your Github page.</p>
+<p><strong>The notebook:</strong> The notebook should be created using <code>rmarkdown</code> or Quarto (like other assignments). The notebook should have a title.</p>
+<p><strong>The Presentation:</strong> Present your results in 5-10 minutes. To make the presentation using Rmarkdown, do the follows:</p>
+<pre><code>- In Rstudio -&gt; File -&gt; New File -&gt; R markdown
+
+- In the left panel, click to Presentation -&gt; Click OK
+
+- Now you have an Rmarkdown that can be knitted to be a html presentation </code></pre>
+<ul>
+<li><p>You can also use the Rmd templates of the class slides.</p></li>
+<li><p>You can also use Quarto to create the presentation: <em>In Rstudio -&gt; File -&gt; New File -&gt; Quarto Presentation…</em></p></li>
+<li><p>You do not need to rerun all the codes for the presentation. For example, to show the model comparison, you just need to show the image of the model comparison instead of running all the models again.</p></li>
+<li><p>To inset an image in a slide, use <code>![](image.png)</code></p></li>
+<li><p>To scale images, you can use <code>![](image.png){width="60%"}</code> or follow these below instructions.</p>
+<ul>
+<li><p>https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html</p></li>
+<li><p>http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/</p></li>
+</ul></li>
+<li><p>To turn off message and warning of a code cell, use: <code>{r, message=FALSE, warning=FALSE}</code> for the cell.</p></li>
+<li><p>To turn off message and warning of a code cell, use: <code>{r, message=FALSE, warning=FALSE}</code> for the cell.</p></li>
+</ul>
+<p><strong>What to present</strong>:</p>
+<ul>
+<li><p>Present Part 2 - Visualization</p></li>
+<li><p>Present Question Question 4, 5 and 6 in Part 3.</p></li>
+<li><p>Present any errors/challenges you run into and how you fix/overcome them.</p></li>
+</ul>
+<p><strong>Data:</strong></p>
+<p>The data for the mid-term project is the Rhode Island Department of Health Hospital Discharge Data. Each row of the data presents a patient.</p>
+<p>Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ</p>
+<p><strong>Notice</strong></p>
+<ul>
+<li>Since this is a large dataset, you could try to run the codes on the smaller dataset, which is a portion of the original dataset before running the codes on the original data. To create a random subset of the data you could use</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find the number of rows of the data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">nrow</span>(df)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># subset 1000 rows of the data</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">=</span> df[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1000</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="i.-data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="i.-data-wrangling">I. Data Wrangling</h2>
+<ol type="1">
+<li><p>Download the data file <code>hdd0318cy.sas7bdat</code>.</p></li>
+<li><p>Use <code>read_sas</code> in library <code>haven</code> to read the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_sas</span>(<span class="st">'hdd0318cy.sas7bdat'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Filter the data to have only patients of the year 2018 (<code>yod==18</code>)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.3     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(yod <span class="sc">==</span> <span class="dv">18</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 131,478 × 135
+     yod payfix pay_ub92   age sex   raceethn filler1 filler2 provider   moa
+   &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;
+ 1    18     NA        9     0 1     1        ""      ""      7214         1
+ 2    18     NA        2    76 2     1        ""      ""      7214         1
+ 3    18     NA        6    50 2     1        ""      ""      7214        12
+ 4    18     NA        4     0 1     7        ""      ""      7214         1
+ 5    18     NA       13     0 1     1        ""      ""      7214        12
+ 6    18     NA        4     0 2     9        ""      ""      7214        12
+ 7    18     NA        4     0 2     1        ""      ""      7214         1
+ 8    18     NA       13     0 2     1        ""      ""      7214         1
+ 9    18     NA        1    70 2     1        ""      ""      7214         1
+10    18     NA        9    25 2     1        ""      ""      7214        12
+# ℹ 131,468 more rows
+# ℹ 125 more variables: yoa &lt;dbl&gt;, mod &lt;dbl&gt;, admtype &lt;chr&gt;, asource &lt;chr&gt;,
+#   filler3 &lt;chr&gt;, dx1 &lt;chr&gt;, dx2 &lt;chr&gt;, dx3 &lt;chr&gt;, dx4 &lt;chr&gt;, dx5 &lt;chr&gt;,
+#   dx6 &lt;chr&gt;, dx7 &lt;chr&gt;, px1 &lt;chr&gt;, px2 &lt;chr&gt;, px3 &lt;chr&gt;, px4 &lt;chr&gt;,
+#   px5 &lt;chr&gt;, px6 &lt;chr&gt;, px7 &lt;chr&gt;, px8 &lt;chr&gt;, px9 &lt;chr&gt;, px10 &lt;chr&gt;,
+#   preopday &lt;dbl&gt;, los &lt;dbl&gt;, filler4 &lt;chr&gt;, service &lt;chr&gt;, icu &lt;chr&gt;,
+#   ccu &lt;chr&gt;, dispub92 &lt;chr&gt;, payer &lt;chr&gt;, drg &lt;dbl&gt;, trandb &lt;chr&gt;, …</code></pre>
+</div>
+</div></li>
+<li><p>Select to work with only following variables:</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>workingVariables <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"yod"</span>, <span class="st">"payfix"</span>,<span class="st">"pay_ub92"</span>,<span class="st">"age"</span>,  </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"sex"</span>,<span class="st">"raceethn"</span>,<span class="st">"provider"</span>,<span class="st">"moa"</span>, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"yoa"</span>,<span class="st">"mod"</span>,<span class="st">"admtype"</span>, <span class="st">"asource"</span> , </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"preopday"</span> ,<span class="st">"los"</span>, <span class="st">"service"</span> , <span class="st">"icu"</span>,<span class="st">"ccu"</span>,    </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"dispub92"</span>, <span class="st">"payer"</span>  ,<span class="st">"drg"</span>,<span class="st">"trandb"</span>, </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"randbg"</span>,<span class="st">"randbs"</span>,<span class="st">"orr"</span>, <span class="st">"anes"</span>,<span class="st">"seq"</span>,   </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"lab"</span>,<span class="st">"dtest"</span>, <span class="st">"ther"</span>,<span class="st">"blood"</span>,<span class="st">"phar"</span>, </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"other"</span>,<span class="st">"patcon"</span>,<span class="st">"bwght"</span>,<span class="st">"total"</span>,<span class="st">"tot"</span> ,  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"ecodub92"</span>,<span class="st">"b_wt"</span>,<span class="st">"pt_state"</span>,<span class="st">"diag_adm"</span>,<span class="st">"ancilar"</span> ,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"campus"</span>,<span class="st">"er_fee"</span>,<span class="st">"er_chrg"</span>,<span class="st">"er_mode"</span>,<span class="st">"obs_chrg"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"obs_hour"</span>,<span class="st">"psycchrg"</span>,<span class="st">"nicu_day"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>dataReduced <span class="ot">&lt;-</span> data[workingVariables]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>Notice</em>: You may want to save the current data to your computer for easy access later. To save the data file use <code>write_csv(df, 'midterm.csv')</code>, for example.</p>
+<ol start="5" type="1">
+<li><p>What are variables that have missing values?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'midterm.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat &lt;- vroom(...)
+  problems(dat)</code></pre>
+</div>
+</div></li>
+<li><p>Remove all variables with missing values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">replace</span>(df, df <span class="sc">==</span> <span class="st">' '</span>, <span class="cn">NA</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     yod   payfix pay_ub92      age      sex raceethn provider      moa 
+       0  2211490   273447       25        3   146005        0   143682 
+     yoa      mod  admtype  asource preopday      los  service      icu 
+       0   143682       75     1451  1013351    60207     1190     1841 
+     ccu dispub92    payer      drg   trandb   randbg   randbs      orr 
+    1841      728        0        3        0        0        0        0 
+    anes      seq      lab    dtest     ther    blood     phar    other 
+       0        0        0        0        0        0        0        0 
+  patcon    bwght    total      tot ecodub92     b_wt pt_state diag_adm 
+       0  2211490        0        0  1813849  1089600   415615   416392 
+ ancilar   campus   er_fee  er_chrg  er_mode obs_chrg obs_hour psycchrg 
+  282340   282342   282340   282340   556686   282340   751884   282340 
+nicu_day 
+ 2115216 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age, sex, moa, mod, los, admtype, campus, diag_adm, <span class="fu">where</span>(<span class="sc">~!</span><span class="fu">any</span>(<span class="fu">is.na</span>(.))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Refer to the data description in the file <code>HDD2015-18cy6-20-19.docx</code>, which variable recording the month of admission?, which variable recording the month of discharge?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>moa) <span class="co">#month of admission</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     1      2      3      4      5      6      7      8      9     10     11 
+142473 130257 143209 137856 140685 137957 139314 138090 135331 138498 132277 
+    12 
+135464 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>mod) <span class="co">#month of discharge </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     1      2      3      4      5      6      7      8      9     10     11 
+140118 129964 143994 138157 141106 138450 138943 138570 134645 138606 132266 
+    12 
+136592 </code></pre>
+</div>
+</div></li>
+<li><p>Which month admitted the most number of patients? Which month admitted the most number of male patients?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The month that admitted the most number of patients is March.</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(moa) <span class="sc">%&gt;%</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_patients =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>total_patients)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+     moa total_patients
+   &lt;dbl&gt;          &lt;int&gt;
+ 1     3         143209
+ 2     1         142473
+ 3     5         140685
+ 4     7         139314
+ 5    10         138498
+ 6     8         138090
+ 7     6         137957
+ 8     4         137856
+ 9    12         135464
+10     9         135331
+11    11         132277
+12     2         130257</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The month that admitted the most number of male patients is March.</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(moa) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">malePatients =</span> <span class="fu">sum</span>(sex <span class="sc">==</span> <span class="st">"1"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>malePatients)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+     moa malePatients
+   &lt;dbl&gt;        &lt;int&gt;
+ 1     3        61852
+ 2     1        61464
+ 3     5        60765
+ 4     7        60666
+ 5    10        59995
+ 6     6        59825
+ 7     8        59683
+ 8     4        59430
+ 9    12        59341
+10     9        58344
+11    11        57207
+12     2        56343</code></pre>
+</div>
+</div></li>
+<li><p>Which month has the most number of teenage female patients?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The month that has the most number of teenage female patients is March.</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>teenAges <span class="ot">&lt;-</span> <span class="fu">case_when</span>(df<span class="sc">$</span>age <span class="sc">&lt;</span><span class="dv">13</span> <span class="sc">~</span> <span class="st">'child'</span>, df<span class="sc">$</span>age<span class="sc">&lt;=</span><span class="dv">19</span> <span class="sc">~</span><span class="st">'teenager'</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">'adult'</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span>, teenAges <span class="sc">==</span> <span class="st">'teenager'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(moa) <span class="sc">%&gt;%</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">teenageFemales =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>teenageFemales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+     moa teenageFemales
+   &lt;dbl&gt;          &lt;int&gt;
+ 1     3           3434
+ 2     1           3419
+ 3     5           3352
+ 4    10           3293
+ 5     4           3139
+ 6    11           3138
+ 7    12           3104
+ 8     9           2982
+ 9     7           2918
+10     6           2857
+11     2           2844
+12     8           2772</code></pre>
+</div>
+</div></li>
+<li><p>Which provider has the most number of female patients in October?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Rhode Island Hospital (7205) has the most number of female patients in October.</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span>, moa <span class="sc">==</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(provider) <span class="sc">%&gt;%</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">femalePatients =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>femalePatients)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 2
+   provider femalePatients
+      &lt;dbl&gt;          &lt;int&gt;
+ 1     7205          16960
+ 2     7214          16313
+ 3     7210           8951
+ 4     7204           8584
+ 5     7202           4166
+ 6     7213           4048
+ 7     7206           4029
+ 8     7209           3371
+ 9     7203           3189
+10     7201           3144
+11     7216           2824
+12     7211           2052
+13     7215            661
+14     7212            192</code></pre>
+</div>
+</div></li>
+<li><p>Is female patients older than male patients, on average?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Female patients are older than male patients on average. </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">averageAge =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>averageAge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+    sex averageAge
+  &lt;dbl&gt;      &lt;dbl&gt;
+1     2       50.4
+2     1       50.3
+3     9       23.3</code></pre>
+</div>
+</div></li>
+<li><p>Calculate the average age of patients by months. Which month has the oldest patients on average age?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#December has the oldest patients on average. </span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(moa)<span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">averageAge =</span> <span class="fu">mean</span>(age, <span class="at">na.rm=</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>averageAge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 2
+     moa averageAge
+   &lt;dbl&gt;      &lt;dbl&gt;
+ 1    12       50.9
+ 2     1       50.7
+ 3     3       50.6
+ 4     2       50.6
+ 5     4       50.5
+ 6    11       50.3
+ 7     6       50.3
+ 8    10       50.3
+ 9     7       50.1
+10     5       50.1
+11     9       49.8
+12     8       49.8</code></pre>
+</div>
+</div></li>
+<li><p>What is the name of the provider that has the highest total charge?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The provider who has the highest total charge is Rhode Island Hospital (7205).</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(provider) <span class="sc">%&gt;%</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">highestTotalCharge =</span> <span class="fu">sum</span>(tot)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>highestTotalCharge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 2
+   provider highestTotalCharge
+      &lt;dbl&gt;              &lt;dbl&gt;
+ 1     7205        16790270707
+ 2     7204         6763948264
+ 3     7214         5160057024
+ 4     7210         5149512079
+ 5     7202         2440188247
+ 6     7213         2346197717
+ 7     7206         1915012364
+ 8     7203         1441305499
+ 9     7209         1327129586
+10     7216         1290393678
+11     7201         1117855728
+12     7211          812782156
+13     7215          613074704
+14     7212          162856290</code></pre>
+</div>
+</div></li>
+<li><p>What is the name of the provider that has the least total charge for teenage male on average?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Newport Hospital (7201) has the least total charge for teenage male patients on average.</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(teenAges <span class="sc">==</span> <span class="st">"teenager"</span>, sex <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(provider) <span class="sc">%&gt;%</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avgTotalCharge =</span> <span class="fu">mean</span>(tot, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(avgTotalCharge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 2
+   provider avgTotalCharge
+      &lt;dbl&gt;          &lt;dbl&gt;
+ 1     7201          9094.
+ 2     7206         10207.
+ 3     7203         10571.
+ 4     7209         11752.
+ 5     7211         13659.
+ 6     7210         18356.
+ 7     7213         20256.
+ 8     7202         20572.
+ 9     7204         22649.
+10     7216         23263.
+11     7212         24002.
+12     7214         28950 
+13     7205         33160.
+14     7215         45083.</code></pre>
+</div>
+</div></li>
+<li><p>Create a season (Spring, Summer, Fall, Winter) variable. Calculate the length of stays by season. Which season has the longest length of stays on average?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">season =</span> <span class="fu">case_when</span>(</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    moa <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">~</span> <span class="st">"Winter"</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    moa <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">~</span> <span class="st">"Spring"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    moa <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>) <span class="sc">~</span> <span class="st">"Summer"</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    moa <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>) <span class="sc">~</span> <span class="st">"Fall"</span>))</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Winter has the longest length of stays on average.</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(season) <span class="sc">%&gt;%</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avgLOS =</span> <span class="fu">mean</span>(los, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>avgLOS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  season avgLOS
+  &lt;chr&gt;   &lt;dbl&gt;
+1 Winter   5.18
+2 Fall     5.07
+3 Spring   5.05
+4 Summer   5.03</code></pre>
+</div>
+</div></li>
+<li><p>On average, how much a 20 year-old male get charged for staying 1 day in the Fall season?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#The average charge for a 20 year old male in the Fall is $10,697.54.</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">1</span>, age <span class="sc">==</span> <span class="dv">20</span>, los <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(season) <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">averageCharge =</span> <span class="fu">mean</span>(tot, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  season averageCharge
+  &lt;chr&gt;          &lt;dbl&gt;
+1 Fall          10893.
+2 Spring        12427.
+3 Summer        11178.
+4 Winter        11489.</code></pre>
+</div>
+</div></li>
+</ol>
+<!-- -->
+<ol start="5" type="1">
+<li></li>
+<li><p>Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points.</p>
+<p><strong>The Data Wrangling section of the midterm project revealed March of 2018 as one of the busiest months for hospital admissions in the State of RI. Specifically, our data analysis shows that March admitted the highest number of patients that year (143,209 patients admitted), the highest number of males patients (61,852 admitted), and the highest number of teenage female patients (6,182 admitted). My further research suggested that the outbreak of E. Coli associated with romaine lettuce was going on during this time period. Thus, some of the uptick in hospitalizations during this month may have been associated with increased cases of this illness. Despite, the highest number of patients being admitted to the hospital occurring in March, our analyses show that the longest average hospital stays occur during the Winter season. Analyses of which month admits the patients of the highest average age show that December admits the oldest patients on average. This makes sense given that December marks the start of the peak flu season in Rhode Island. As older individuals are more susceptible to serious illness associated with flu and respiratory illnesses, it’s likely to see an uptick in hospitalizations starting in December and throughout the winter season. We seek through our calculations that December, January, March, and February see the oldest patients being admitted to the hospital which corresponds with our conclusions regarding the data. Our analyses also show that female patients are older on average than male patients represented in this subset of our data set. Despite this, our further analyses show that there are ultimately more males in the data set than females, thus, no additional calculations yield results suggesting that the older average age of females in this data set effect any related hospital outcomes. We found that the provider with the highest total charge is Rhode Island Hospital. This is an expected outcome given that Rhode Island Hospital is the state’s trauma hospital and provides more advanced treatments. Newport Hospital was demonstrated to have the lowest average total charge for teenage male patients. In our assessment of the highest total average charges, Newport Hospital was not within the top 10 highest average charges, thus, it makes sense that Newport Hospital would have a lower average cost for this subset of patients. Lastly, our analyses show that the average charge for a 20 year old male patients hospitalized for 1 day is $10,892.51. Interestingly, this charge is above the average total charge for patients in the fall which is $10,697.42. This could be related to male patients being admitted to providers with a higher overall average total charge. In summary, these data wrangling calculations provide important insights regarding the admissions statistics for different subsets of patients within RI hospitals.</strong></p></li>
+</ol>
+</section>
+<section id="ii.-data-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="ii.-data-visualization">II. Data Visualization</h2>
+<p>Continue with the data from part I.</p>
+<ol type="1">
+<li><p>Provides at least 10 meaningful plots. Comments on the plots. All plots should have title, caption, appropriate labels on x and y-axis</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gganimate)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gifski)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 1 </span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Gender <span class="ot">&lt;-</span> <span class="fu">case_when</span>(df<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">'Male'</span>, df<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span><span class="st">'Female'</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">'Unknown'</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    df <span class="sc">%&gt;%</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(Gender <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(Gender) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">averageTot =</span> <span class="fu">mean</span>(tot, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>()<span class="sc">+</span> </span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_col</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>Gender, <span class="at">y=</span>averageTot))<span class="sc">+</span> <span class="fu">theme_few</span>()<span class="sc">+</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Gender'</span>, </span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="st">'Average Patient Charges'</span>, </span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">title =</span> <span class="st">'Average Patient Charges by Gender'</span>, </span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">caption =</span> <span class="st">'Average patient charge of males is just over $30,000 compared to females where the average is approximately $17,500.'</span>)<span class="sc">+</span>  </span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),  <span class="co"># Title formatting</span></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 2</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Hospital <span class="ot">&lt;-</span> <span class="fu">case_when</span>(df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7201</span> <span class="sc">~</span> <span class="st">'Newport'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7202</span> <span class="sc">~</span> <span class="st">'St. Joseph'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7203</span> <span class="sc">~</span> <span class="st">'Memorial'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7204</span> <span class="sc">~</span> <span class="st">'Miriam'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7205</span> <span class="sc">~</span> <span class="st">'Rhode Island Hospital'</span>,df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7206</span> <span class="sc">~</span> <span class="st">'Roger Williams'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7209</span> <span class="sc">~</span> <span class="st">'South County'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7210</span> <span class="sc">~</span> <span class="st">'Kent County'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7211</span> <span class="sc">~</span> <span class="st">'Westerly'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7212</span> <span class="sc">~</span> <span class="st">'Rehab of RI'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7213</span> <span class="sc">~</span> <span class="st">'Landmark Medical Center'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7214</span> <span class="sc">~</span> <span class="st">'Women and Infants'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7215</span> <span class="sc">~</span> <span class="st">'Bradley'</span>, df<span class="sc">$</span>provider <span class="sc">==</span> <span class="dv">7216</span> <span class="sc">~</span> <span class="st">'Butler'</span>)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Gender <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Gender, Hospital) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">averageLOS =</span> <span class="fu">mean</span>(los, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x=</span>Gender, <span class="at">y=</span> averageLOS, <span class="at">fill =</span> Hospital), <span class="at">position =</span> <span class="st">'dodge'</span>)<span class="sc">+</span> <span class="fu">theme_calc</span>() <span class="sc">+</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Gender'</span>, </span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Average Length of Stay (Days)'</span>, </span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">fill =</span> <span class="st">'Provider Hospital'</span>,</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Average Length of Stay by Gender and Hospital'</span>, </span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'Longest average stays occur in psychiatric care facilities for both genders.'</span>)<span class="sc">+</span>  </span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Gender'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 3 </span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>tot))<span class="sc">+</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Age'</span>,</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Total Patient Charges'</span>, </span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Patient Charges by Age'</span>, </span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'The smooth plot shows ranges of data where total charges increase with age.'</span>) <span class="sc">+</span> <span class="fu">theme_calc</span>()<span class="sc">+</span>  </span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 4 </span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Admission <span class="ot">&lt;-</span> <span class="fu">case_when</span>(df<span class="sc">$</span>admtype <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">'Emergency'</span>, df<span class="sc">$</span>admtype <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">'Urgent'</span>, df<span class="sc">$</span>admtype <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">'Elective'</span>, df<span class="sc">$</span>admtype <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">'Newborn'</span>, df<span class="sc">$</span>admtype <span class="sc">==</span> <span class="dv">5</span> <span class="sc">~</span> <span class="st">'Court Committal or Trauma'</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">'Unknown'</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Hospital <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Rhode Island Hospital"</span>, <span class="st">"Bradley"</span>, <span class="st">"Rehab of RI"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span> </span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>Hospital, <span class="at">fill=</span>Admission), </span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">'fill'</span>)<span class="sc">+</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Hospital'</span>, </span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Percentage of Admission Types'</span>, </span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span><span class="st">'Admission Type'</span>, </span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Admission Type by Hospital'</span>, </span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'This chart shows differences in admission types based on different hospital types in RI.'</span>)<span class="sc">+</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_calc</span>()<span class="sc">+</span>  </span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 5</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Hospital <span class="sc">==</span> <span class="st">'Rhode Island Hospital'</span>, season <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Spring'</span>, <span class="st">'Summer'</span>, <span class="st">'Fall'</span>, <span class="st">'Winter'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> season, <span class="at">fill =</span> Admission)) <span class="sc">+</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span> <span class="fu">theme_calc</span>()<span class="sc">+</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Season"</span>,</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Admission Count"</span>,</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Admission Types by Season at Rhode Island Hospital"</span>,</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"As RI's trauma hospital, emergency admissions are most common in all season."</span>)<span class="sc">+</span>  </span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 6</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Hospital <span class="sc">==</span><span class="st">'Rhode Island Hospital'</span>, age <span class="sc">&gt;</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> tot, <span class="at">color =</span> season ))<span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span><span class="fu">theme_calc</span>()<span class="sc">+</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Age'</span>, </span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Total Patient Charges'</span>, </span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span><span class="st">'Season'</span>, </span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Total Patient Charges (Ages 50+) by Season'</span>, </span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'There is an increase in charges for patients ages 50+ during the winter season.'</span>)<span class="sc">+</span>  </span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 7</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Hospital <span class="sc">==</span><span class="st">'Bradley'</span>, Admission <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Urgent'</span>, <span class="st">'Elective'</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>los, <span class="at">color =</span> Admission))<span class="sc">+</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Age'</span>,</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Length of Stay'</span>, </span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Length of Stay by Age (Grouped by Admission Type)'</span>, </span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'Length of urgent admission stay increases between 15 and 20 years.'</span>) <span class="sc">+</span> <span class="fu">theme_calc</span>()<span class="sc">+</span> </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 8</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Gender <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Male'</span>, <span class="st">'Female'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Gender, <span class="at">y =</span> age)) <span class="sc">+</span>  </span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Gender'</span>,</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Age'</span>, </span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Distribution of Patient Ages by Gender'</span>, </span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'Median age of male patients is higher than female patients.'</span>) <span class="sc">+</span> <span class="fu">theme_calc</span>()<span class="sc">+</span>  </span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 9</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Admission <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Court Committal or Trauma'</span>, <span class="st">'Elective'</span>, <span class="st">'Emergency'</span>, <span class="st">'Newborn'</span>, <span class="st">'Urgent'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(teenAges, Admission) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">averageLOS =</span> <span class="fu">mean</span>(los, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x=</span>teenAges, <span class="at">y=</span> averageLOS, <span class="at">fill =</span> Admission), <span class="at">position =</span> <span class="st">'dodge'</span>)<span class="sc">+</span> <span class="fu">theme_calc</span>() <span class="sc">+</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Age Group'</span>, </span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Average Length of Stay (Days)'</span>, </span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">fill =</span> <span class="st">'Admission Type'</span>,</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Average Length of Stay by Age Group and Admission'</span>, </span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'Longest average stays occur in all age groups when admission type is court committal or trauma.'</span>)<span class="sc">+</span>  </span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'teenAges'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot 10</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">case_when</span>(df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">'January'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">'February'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">'March'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">'April'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">5</span> <span class="sc">~</span> <span class="st">'May'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">6</span> <span class="sc">~</span> <span class="st">'June'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">7</span> <span class="sc">~</span> <span class="st">'July'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">8</span> <span class="sc">~</span> <span class="st">'August'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">9</span> <span class="sc">~</span> <span class="st">'September'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">10</span> <span class="sc">~</span> <span class="st">'October'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">11</span> <span class="sc">~</span> <span class="st">'Novemeber'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">12</span> <span class="sc">~</span> <span class="st">'December'</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'January'</span>, <span class="st">'December'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span> </span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>month, <span class="at">fill=</span> teenAges),</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">'dodge'</span>)<span class="sc">+</span><span class="fu">theme_calc</span>()<span class="sc">+</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Month'</span>, </span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">'Number of Patients'</span>, </span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span><span class="st">'Age Group'</span>, </span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Number of Patients Admitted in December &amp; January by Age Group'</span>,</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'Adults are admitted most in December and January.'</span>)<span class="sc">+</span>  </span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ol start="2" type="1">
+<li><p>Make an animation plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>month2 <span class="ot">&lt;-</span> <span class="fu">case_when</span>(df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">'01'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">'02'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">'03'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">'04'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">5</span> <span class="sc">~</span> <span class="st">'05'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">6</span> <span class="sc">~</span> <span class="st">'06'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">7</span> <span class="sc">~</span> <span class="st">'07'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">8</span> <span class="sc">~</span> <span class="st">'08'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">9</span> <span class="sc">~</span> <span class="st">'09'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">10</span> <span class="sc">~</span> <span class="st">'10'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">11</span> <span class="sc">~</span> <span class="st">'11'</span>, df<span class="sc">$</span>moa <span class="sc">==</span> <span class="dv">12</span> <span class="sc">~</span> <span class="st">'12'</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(month2, Hospital) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(los))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'month2'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> d1 <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(month2) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">rank=</span><span class="fu">rank</span>(<span class="sc">-</span>mean)) </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>d3 <span class="ot">&lt;-</span> d2 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(rank <span class="sc">&lt;=</span> <span class="dv">10</span>)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>a1 <span class="ot">&lt;-</span> d3 <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>rank, <span class="at">y=</span>mean, <span class="at">group=</span>Hospital, <span class="at">fill=</span>Hospital, <span class="at">label=</span>Hospital)) <span class="sc">+</span> <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">y =</span> mean, <span class="at">label =</span> Hospital), <span class="at">hjust =</span> <span class="fl">1.4</span>)<span class="sc">+</span> </span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_flip</span>(<span class="at">clip =</span> <span class="st">"off"</span>, <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span><span class="fu">scale_x_reverse</span>()<span class="sc">+</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Month {closest_state}'</span>, <span class="at">x=</span><span class="st">''</span>, <span class="at">y=</span><span class="st">'Average Length of Stay'</span>, <span class="at">fill=</span><span class="st">'Hospital'</span>)<span class="sc">+</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">22</span>),</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text.y  =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span> </span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transition_states</span>(month2)<span class="sc">+</span></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ease_aes</span>(<span class="st">"cubic-in-out"</span>)</span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a><span class="fu">animate</span>(a1, <span class="at">nframes =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-30-1.gif" class="img-fluid"></p>
+</div>
+</div></li>
+<li><p>Write a paragraph to summarize the section and give your comments on the results.</p></li>
+</ol>
+<p><strong>For the data visualization section of my midterm, I focused on metrics that provided vital insights into specific subsets of admissions statistics. First, I created a bar graph showing that the average total charges for male patients is higher than that of female patients. I thought it was interesting that the charges for male patients was higher on average and this led me to question what factors may have contributed to this phenomena. One visualization I created was a distribution of box plots that showed that the distribution of the ages of male patients is skewed slightly older than that of female patients. This may contribute to the higher overall average total charges because the older ages may contribute to necessity for more significant treatments. A smooth plot of age data shows that between 40 and 80 years, we see a peak in the total patients charges. Thus, older age is associated with having higher hospital charges. A grouped bar chart of the length of stays by gender at the different state providers shows that the length of stays in the hospital of male patients tends to be longer than that of female patients. The longest stays typically occur at hospitals that require long-term care such as mental health facilities (Bradley and Butler) and rehab centers (Rehab Rhode Island). Thus, this likely contributes to the rise in total costs that male patients have because stays in these facilities necessitate long term treatment options. I was also interested in investigating the specific types of admissions that occur within major hospitals in RI. I filtered my date to investigate Bradley, Rehab of Rhode Island, and Rhode Island Hospital. This revealed urgent admission were most common at Bradley (this make sense given this is a mental health facility, elective admission was most common at Rehab RI (this corresponds with the nature of this type of facility), and emergency admission was most common at Rhode Island Hospital (this facility is a trauma center). Our bar race of admissions shows that over the 12 months of the year, the longest average admissions are primarily are Bradley but swap occasionally with Rehab RI. Interestingly, grouping by different seasons at Rhode Island Hospital did not yield any admission type other than emergency to be more common. As a trauma center, these results are likely expected. It was interesting that when grouping urgent vs elective at Bradley Hospital, we find that the length of stay is shorter for those who choose to admit themselves versus those who are required to go urgently. This likely corresponds with the type of care these individuals require. Individuals with elective admissions are likely transferred to outpatient care faster. I then decided to investigate the ages of patients variable further. This yielded results showing that average stay for all age groups (child, teens, and adults) is longest when admission type is trauma or urgent. Our calculations show that adults are admitted most in December and January which corresponds with the peak of flu season in RI and total patient charges being highest for adults during winter months. These visualizations provide insights into the nature of admissions for different patients, hospitals, and admission types.</strong></p>
+<hr>
+</section>
+<section id="iii.-predictive-models" class="level2">
+<h2 class="anchored" data-anchor-id="iii.-predictive-models">III. Predictive Models</h2>
+<p>Continue with the data from part I. Use the follows as the target and input variables:</p>
+<p><em>Target Variable</em>: Create the target variable taking value of</p>
+<ul>
+<li><p><code>low</code> if the total charge of a patient (<code>tot</code>) is smaller than the median of the total charge, and</p></li>
+<li><p><code>high</code> otherwise.</p></li>
+</ul>
+<p><em>Input Variables</em>:</p>
+<ul>
+<li>“provider”,“moa”,“mod”,“admtype”,“campus”, ‘los’,‘diag_adm’</li>
+</ul>
+<hr>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>medianTotal <span class="ot">&lt;-</span> <span class="fu">median</span>(df<span class="sc">$</span>tot)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>target <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>tot <span class="sc">&lt;</span> medianTotal, <span class="st">"low"</span>, <span class="st">"high"</span>)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>input_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"provider"</span>, <span class="st">"moa"</span>, <span class="st">"mod"</span>, <span class="st">"admtype"</span>, <span class="st">"campus"</span>, <span class="st">"los"</span>, <span class="st">"diag_adm"</span>, <span class="st">"sex"</span>)</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(input_vars, <span class="st">"target"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="1">
+<li><p>Use <code>filter</code> function to filter out rows where <code>raceethn==''</code> or <code>admtype==''</code>. Make sure all the categorical variables are factor, numeric variables are numeric. Set Training : Testing Split = 10 : 90</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> df1 <span class="sc">%&gt;%</span> </span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">target =</span> <span class="fu">as.factor</span>(target),</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">provider =</span> <span class="fu">as.factor</span>(provider),</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">admtype =</span> <span class="fu">as.factor</span>(admtype),</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">campus =</span> <span class="fu">as.factor</span>(campus),</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">sex =</span> <span class="fu">as.factor</span>(sex)</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(df1)</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> df1 <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>diag_adm)</span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'caret'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    lift</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2018</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>splitIndex <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(df1<span class="sc">$</span>target, <span class="at">p =</span> .<span class="dv">1</span>, </span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>df1_train <span class="ot">&lt;-</span> df1[ splitIndex,]</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>df1_test <span class="ot">&lt;-</span> df1[<span class="sc">-</span>splitIndex,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Train a decision tree using <code>rpart</code>. Plot the decision tree. Plot the variable importance ranked by the tree.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>tree_model <span class="ot">&lt;-</span> <span class="fu">rpart</span>(target <span class="sc">~</span> ., <span class="at">data =</span> df1_train,</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">maxdepth =</span> <span class="dv">3</span>))</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rattle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: bitops</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rattle: A free graphical interface for data science with R.
+Version 5.5.1 Copyright (c) 2006-2021 Togaware Pty Ltd.
+Type 'rattle()' to shake, rattle, and roll your data.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(tree_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+</div>
+</div></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>tree_model<span class="sc">$</span>variable.importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        los    provider      campus     admtype         moa         mod 
+23142.79736  6613.13367  2427.19235   113.76785    20.57438    17.76879 
+        sex 
+    3.27604 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(tree_model<span class="sc">$</span>variable.importance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(tree_model, df1_test, <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(<span class="at">data =</span> pred, <span class="at">reference =</span> df1_test<span class="sc">$</span>target, <span class="at">positive =</span> <span class="st">"low"</span>)</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>cm<span class="sc">$</span>overall[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Accuracy 
+0.7784311 </code></pre>
+</div>
+</div>
+<ol type="1">
+<li><p>Using caret for this question. Set <code>Training Control</code> to be: Use Cross-Validation of 5 folds across all models. Train &amp; tune at least 2 different models (i.e.&nbsp;two different values for <code>method=</code> in the train function of caret). Plot the hyper-parameter tuning plots for each model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>trControl <span class="ot">=</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">number =</span> <span class="dv">5</span>)</span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>glm <span class="ot">&lt;-</span> <span class="fu">train</span>(target<span class="sc">~</span>., <span class="at">data=</span>df1_train, </span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"glmboost"</span>, </span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a>                                <span class="at">trControl =</span> trControl)</span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a>fda <span class="ot">&lt;-</span> <span class="fu">train</span>(target<span class="sc">~</span>., <span class="at">data=</span>df1_train, </span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"fda"</span>, </span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a>                                <span class="at">trControl =</span> trControl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: earth</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Formula</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: plotmo</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: plotrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: TeachingDemos</code></pre>
+</div>
+</div></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(glm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ol type="1">
+<li><p>Plot the comparison of the models in 3.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="st">'Flexible Discriminant Analysis'</span> <span class="ot">=</span> fda,</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">'Generalized Linear Model'</span> <span class="ot">=</span> glm))</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bwplot</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="672"></p>
+</div>
+</div></li>
+<li><p>What is your final selection for the model? Test the accuracy of your final model on the test data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fda, df1_test)</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(<span class="at">data =</span> pred, <span class="at">reference =</span> df1_test<span class="sc">$</span>target, <span class="at">positive =</span> <span class="st">"high"</span>)</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>cm<span class="sc">$</span>overall[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Accuracy 
+0.7933631 </code></pre>
+</div>
+</div></li>
+<li><p>Create another <code>target</code> variable (binary), decide the input variables and redo 1 to 5.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'midterm.csv'</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat &lt;- vroom(...)
+  problems(dat)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">replace</span>(df, df <span class="sc">==</span> <span class="st">' '</span>, <span class="cn">NA</span>)</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age, sex, moa, mod, los, admtype, campus, diag_adm, <span class="fu">where</span>(<span class="sc">~!</span><span class="fu">any</span>(<span class="fu">is.na</span>(.))))</span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>meanLOS <span class="ot">&lt;-</span> <span class="fu">mean</span>(df<span class="sc">$</span>los)</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>target2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>los <span class="sc">&lt;</span> meanLOS, <span class="st">"short"</span>, <span class="st">"long"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>input_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"provider"</span>, <span class="st">"moa"</span>, <span class="st">"mod"</span>, <span class="st">"admtype"</span>, <span class="st">"campus"</span>, <span class="st">"sex"</span>)</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(input_vars, <span class="st">"target2"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">target2 =</span> <span class="fu">as.factor</span>(target2),</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">provider =</span> <span class="fu">as.factor</span>(provider),</span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">admtype =</span> <span class="fu">as.factor</span>(admtype),</span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">campus =</span> <span class="fu">as.factor</span>(campus),</span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">sex =</span> <span class="fu">as.factor</span>(sex)</span>
+<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-9"><a href="#cb88-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-10"><a href="#cb88-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb88-11"><a href="#cb88-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2018</span>)</span>
+<span id="cb88-12"><a href="#cb88-12" aria-hidden="true" tabindex="-1"></a>splitIndex <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(df<span class="sc">$</span>target2, <span class="at">p =</span> .<span class="dv">1</span>, </span>
+<span id="cb88-13"><a href="#cb88-13" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb88-14"><a href="#cb88-14" aria-hidden="true" tabindex="-1"></a>df_train <span class="ot">&lt;-</span> df[ splitIndex,]</span>
+<span id="cb88-15"><a href="#cb88-15" aria-hidden="true" tabindex="-1"></a>df_test <span class="ot">&lt;-</span> df[<span class="sc">-</span>splitIndex,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>tree_model <span class="ot">&lt;-</span> <span class="fu">rpart</span>(target2 <span class="sc">~</span> ., <span class="at">data =</span> df_train,</span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">maxdepth =</span> <span class="dv">3</span>))</span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rattle)</span>
+<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(tree_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>tree_model<span class="sc">$</span>variable.importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    provider       campus      admtype          sex 
+3023.7965268 1241.7582444    0.5857355    0.2718385 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(tree_model<span class="sc">$</span>variable.importance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>trControl <span class="ot">=</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">number =</span> <span class="dv">5</span>)</span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a>glm <span class="ot">&lt;-</span> <span class="fu">train</span>(target2<span class="sc">~</span>., <span class="at">data=</span>df_train, </span>
+<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"glmboost"</span>, </span>
+<span id="cb94-6"><a href="#cb94-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">trControl =</span> trControl)</span>
+<span id="cb94-7"><a href="#cb94-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-8"><a href="#cb94-8" aria-hidden="true" tabindex="-1"></a>fda <span class="ot">&lt;-</span> <span class="fu">train</span>(target2<span class="sc">~</span>., <span class="at">data=</span>df_train, </span>
+<span id="cb94-9"><a href="#cb94-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"fda"</span>, </span>
+<span id="cb94-10"><a href="#cb94-10" aria-hidden="true" tabindex="-1"></a>                                <span class="at">trControl =</span> trControl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(glm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="st">'Flexible Discriminant Analysis'</span> <span class="ot">=</span> fda,</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">'Generalized Linear Model'</span> <span class="ot">=</span> glm))</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bwplot</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="MidtermProject_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fda, df_test)</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(<span class="at">data =</span> pred, <span class="at">reference =</span> df_test<span class="sc">$</span>target2, <span class="at">positive =</span> <span class="st">"long"</span>)</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>cm<span class="sc">$</span>overall[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Accuracy 
+0.7583479 </code></pre>
+</div>
+</div>
+<ol type="1">
+<li>Write a paragraph to summarize the section and give your comments on the results.</li>
+</ol>
+<p><strong>In this section, we first predicted total patient charges (low or high). I did this using the input variables provider, moa, mod, admtype, campus, and los. I dropped diag_adm due to plotting being an issue with this variable due to the many values this variable could take. Plotting of this decision tree broke off different branches at different instances of los and provider. Plotting of variable importance identified 1. los, 2. provider, 3. campus, 4. admtype, 5. moa, 6. mod as variables important in making predictions. Testing of this decision tree yielded an accuracy score of about 77.8%. I then trained models glmboost and fda. I ultimately found the flexible discriminant model to have the higher accuracy rating. Thus, I chose this as my final model and obtained an accuracy of about 79.3%.</strong></p>
+<p><strong>In the second part of this section, I predicted on length of stay (short or long) which was determined by whether length of stay was below or above the mean length of stay. I used the input variables provider, moa, mod, admtype, campus, and sex. Plotting of the decision tree broke off different branches using provider. Plotting of variable importance identified 1. provider, 2. campus, 3. admtype, 4. sex as variables important in making predictions. I then trained models glmboost and fda. I ultimately found the flexible discriminant analysis higher accuracy rating. I chose fda as my final model and obtained an accuracy score of about 75.8%.</strong></p>
+<hr>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

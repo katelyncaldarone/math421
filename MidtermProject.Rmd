@@ -1,0 +1,192 @@
+---
+title: "MATH 421 Midterm Project"
+author: "Katelyn Caldarone"
+date: "2023-10-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+1. Use read_sas in library haven to read the hospital discharge data. 
+```{r}
+library(haven)
+data <- read_sas('hdd0318cy.sas7bdat')
+```
+
+2. Filter the data to have only patients of the year 2018(yod = 2018)
+```{r}
+library(tidyverse)
+
+data %>%
+  filter(yod == 18)
+```
+
+3. Select to work only with the following variables:
+```{r}
+workingVariables <- c("yod", "payfix","pay_ub92","age",  
+                      "sex","raceethn","provider","moa", 
+                      "yoa","mod","admtype", "asource" , 
+                      "preopday" ,"los", "service" , "icu","ccu",    
+                      "dispub92", "payer"  ,"drg","trandb", 
+                      "randbg","randbs","orr", "anes","seq",   
+                      "lab","dtest", "ther","blood","phar", 
+                      "other","patcon","bwght","total","tot" ,  
+                      "ecodub92","b_wt","pt_state","diag_adm","ancilar" ,
+                      "campus","er_fee","er_chrg","er_mode","obs_chrg",
+                      "obs_hour","psycchrg","nicu_day")
+
+dataReduced <- data[workingVariables]
+```
+
+4.What are the variables with missing data?
+```{r}
+
+df <- read_csv('midterm.csv', show_col_types = FALSE)
+```
+```{r}
+df <- replace(df, df == ' ', NA)
+
+colSums(is.na(df))
+```
+
+
+5. Remove all variables with missing variables.
+```{r}
+library(dplyr)
+df <- df %>%
+  select(age, sex, moa, mod, los, where(~!any(is.na(.))))
+```
+
+```{r}
+library(tidyr)
+drop_na(df)
+```
+
+6. Which variables records the month of admission, month of discharge?
+```{r}
+table(df$moa) #month of admission
+table(df$mod) #month of discharge 
+```
+
+7. Which month admitted the most number of patients? Which month admitted the most number of male patients?
+```{r}
+#The month that admitted the most number of patients is March.
+df %>%
+  group_by(moa) %>%
+  summarise(total_patients = n()) %>%
+  arrange(-total_patients)
+```
+
+```{r}
+#The month that admitted the most number of male patients is March.
+df %>%
+  group_by(moa) %>%
+  summarise(malePatients = sum(sex == "1")) %>%
+  arrange(-malePatients)
+```
+
+8. Which month has the most number of teenage female patients?
+```{r}
+#The month that has the most number of teenage female patients is March.
+
+df$teenAges <- case_when(df$age <13 ~ 'child', df$age<=19 ~'teenager', TRUE ~ 'adult')
+
+df %>%
+  filter(sex == 2, teenAges == 'teenager') %>%
+  group_by(moa) %>%
+  summarise(teenageFemales = n()) %>%
+  arrange(-teenageFemales)
+```
+9. Which provider has the most number of female patients in October?
+```{r}
+#Rhode Island Hospital (7205) has the most number of female patients in October.
+df %>%
+  filter(sex == 2, moa == 10) %>%
+  group_by(provider) %>%
+  summarise(femalePatients = n()) %>%
+  arrange(-femalePatients)
+```
+
+10. Are female patients older than male patients on average?
+
+```{r}
+#Female patients are older than male patients on average. 
+
+df %>%
+  group_by(sex) %>%
+  summarise(averageAge = mean(age, na.rm = TRUE)) %>%
+  arrange(-averageAge)
+```
+
+
+11. Calculate the average age of patients by months. Which month has the oldest patients on average?
+
+```{r}
+#December has the oldest patients on average. 
+
+df %>%
+  group_by(moa)%>%
+  summarise(averageAge = mean(age, na.rm= TRUE)) %>%
+  arrange(-averageAge)
+```
+
+
+12. What is the name of the provider who has the highest total charge?
+
+```{r}
+#The provider who has the highest total charge is Rhode Island Hospital (7205).
+
+df %>%
+  group_by(provider) %>%
+  summarise(highestTotalCharge = sum(tot)) %>%
+  arrange(-highestTotalCharge)
+```
+
+
+13. What is the name of the provider that has the least total charge for teenage male on average?
+
+```{r}
+#Newport Hospital (7201) has the least total charge for teenage male patients on average.
+
+df %>%
+  filter(teenAges == "teenager", sex == 1) %>%
+  group_by(provider) %>%
+  summarise(avgTotalCharge = mean(tot, na.rm = TRUE)) %>%
+  arrange(avgTotalCharge)
+  
+```
+
+
+14. Create a season (Spring, Summer, Fall, Winter) variable. Calculate the length of stays by season. Which season has the longest length of stays on average?
+
+```{r}
+df <- df %>%
+  mutate(season = case_when(
+    moa %in% c(12, 1, 2) ~ "Winter",
+    moa %in% c(3, 4, 5) ~ "Spring",
+    moa %in% c(6, 7, 8) ~ "Summer",
+    moa %in% c(9, 10, 11) ~ "Fall"))
+
+#Winter has the longest length of stays on average.
+df %>%
+  group_by(season) %>%
+  summarise(avgLOS = mean(los, na.rm = TRUE)) %>%
+  arrange(-avgLOS)
+```
+
+
+15. On average, how much a 20 year-old male get charged for staying 1 day in the Fall season?
+
+```{r}
+#The average charge for a 20 yeaer old male in the Fall is $10,697.54.
+df %>%
+  filter(sex == 1, age == 20, season == "Fall", los == 1) %>%
+  summarise(averageCharge = mean(tot, na.rm = TRUE))
+```
+
+
+16. Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points.
+
