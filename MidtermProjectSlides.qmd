@@ -94,4 +94,14 @@ Accuracy 0.7583479
 
 # Challenges & Solutions
 
+::: incremental
+-   Challenge: Cluttered visualizations.
+
+    -   Solution: Created new variables which grouped attributes to simplify visualizations.
+
+-   Challenge: Decision tree with too many attributes.
+
+    -   Solution: Pruning of decision tree to improve interpretation ability.
+:::
+
 # Thank you!
