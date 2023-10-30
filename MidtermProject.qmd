@@ -578,8 +578,6 @@ tree_model$variable.importance
 
 ```{r}
 barplot(tree_model$variable.importance)
-
-ggsave(filename = 'VarImp1.png', plot = last_plot())
 ```
 
 ```{r}
@@ -609,12 +607,10 @@ cm$overall[1]
 
 ```{r}
 plot(glm)
-ggsave(filename = 'glm1.png', plot = last_plot())
 ```
 
 ```{r}
 plot(fda)
-ggsave(filename = 'fda1.png', plot = last_plot())
 ```
 
 1.  Plot the comparison of the models in 3.
@@ -687,8 +683,6 @@ tree_model <- rpart(target2 ~ ., data = df_train,
 
 library(rattle)
 fancyRpartPlot(tree_model)
-
-ggsave(filename = 'decisiontree2.png', plot = gg)
 ```
 
 ```{r}
