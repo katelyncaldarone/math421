@@ -301,7 +301,8 @@ df$Gender <- case_when(df$sex == 1 ~ 'Male', df$sex == 2 ~'Female', TRUE ~ 'Unkn
     plot.title = element_text(size = 16, face = "bold"),  # Title formatting
     plot.caption = element_text(size = 6, color = "black", hjust = 0.5)
   )
-     
+
+ggsave(filename = 'MidtermPlot1.png', plot = last_plot())
 ```
 
 ```{r}
@@ -325,6 +326,7 @@ labs(x='Gender',
     plot.title = element_text(size = 10, face = "bold"), 
     plot.caption = element_text(size = 6, color = "black", hjust = 0.5))
 
+ggsave(filename = 'MidtermPlot2.png', plot = last_plot())
 ```
 
 ```{r}
@@ -340,6 +342,8 @@ df %>%
   theme(
     plot.title = element_text(size = 16, face = "bold"), 
     plot.caption = element_text(size = 6, color = "black", hjust = 0.5))
+
+ggsave(filename = 'MidtermPlot3.png', plot = last_plot())
 ```
 
 ```{r}
@@ -361,6 +365,7 @@ df %>%
     plot.title = element_text(size = 16, face = "bold"), 
     plot.caption = element_text(size = 6, color = "black", hjust = 0.5))
 
+ggsave(filename = 'MidtermPlot4.png', plot = last_plot())
 
 ```
 
@@ -379,6 +384,8 @@ df %>%
   theme(
     plot.title = element_text(size = 16, face = "bold"), 
     plot.caption = element_text(size = 10, color = "black", hjust = 0.5))
+
+ggsave(filename = 'MidtermPlot5.png', plot = last_plot())
 ```
 
 ```{r}
@@ -395,6 +402,8 @@ labs(x='Age',
   theme(
     plot.title = element_text(size = 16, face = "bold"), 
     plot.caption = element_text(size = 10, color = "black", hjust = 0.5))
+
+ggsave(filename = 'MidtermPlot6.png', plot = last_plot())
 ```
 
 ```{r}
@@ -410,6 +419,8 @@ df %>%
   theme(
     plot.title = element_text(size = 16, face = "bold"), 
     plot.caption = element_text(size = 10, color = "black", hjust = 0.5))
+
+ggsave(filename = 'MidtermPlot7.png', plot = last_plot())
 ```
 
 ```{r}
@@ -424,6 +435,8 @@ df %>%
   theme(
     plot.title = element_text(size = 16, face = "bold"), 
     plot.caption = element_text(size = 10, color = "black", hjust = 0.5))
+
+ggsave(filename = 'MidtermPlot8.png', plot = last_plot())
 ```
 
 ```{r}
@@ -442,6 +455,8 @@ labs(x='Age Group',
   theme(
     plot.title = element_text(size = 16, face = "bold"), 
     plot.caption = element_text(size = 6, color = "black", hjust = 0.5))
+
+ggsave(filename = 'MidtermPlot9.png', plot = last_plot())
 ```
 
 ```{r}
@@ -462,6 +477,7 @@ labs(x='Month',
     plot.title = element_text(size = 10, face = "bold"), 
     plot.caption = element_text(size = 6, color = "black", hjust = 0.5))
 
+ggsave(filename = 'MidtermPlot10.png', plot = last_plot())
 ```
 
 2.  Make an animation plot.
@@ -481,12 +497,16 @@ labs(x='Month',
               axis.text.y  = element_blank()) + 
         transition_states(month2)+
         ease_aes("cubic-in-out")
-    animate(a1, nframes = 400)
+    animation <- animate(a1, nframes = 400)
+
+
+    anim_save("MidtermBarsRace.gif", animation, width = 3000, height = 1000)
+
     ```
 
 3.  Write a paragraph to summarize the section and give your comments on the results.
 
-**For the data visualization section of my midterm, I focused on metrics that provided vital insights into specific subsets of admissions statistics. First, I created a bar graph showing that the average total charges for male patients is higher than that of female patients. I thought it was interesting that the charges for male patients was higher on average and this led me to question what factors may have contributed to this phenomena. One visualization I created was a distribution of box plots that showed that the distribution of the ages of male patients is skewed slightly older than that of female patients. This may contribute to the higher overall average total charges because the older ages may contribute to necessity for more significant treatments. A smooth plot of age data shows that between 40 and 80 years, we see a peak in the total patients charges. Thus, older age is associated with having higher hospital charges. A grouped bar chart of the length of stays by gender at the different state providers shows that the length of stays in the hospital of male patients tends to be longer than that of female patients. The longest stays typically occur at hospitals that require long-term care such as mental health facilities (Bradley and Butler) and rehab centers (Rehab Rhode Island). Thus, this likely contributes to the rise in total costs that male patients have because stays in these facilities necessitate long term treatment options. I was also interested in investigating the specific types of admissions that occur within major hospitals in RI. I filtered my date to investigate Bradley, Rehab of Rhode Island, and Rhode Island Hospital. This revealed urgent admission were most common at Bradley (this make sense given this is a mental health facility, elective admission was most common at Rehab RI (this corresponds with the nature of this type of facility), and emergency admission was most common at Rhode Island Hospital (this facility is a trauma center). Our bar race of admissions shows that over the 12 months of the year, the longest average admissions are primarily are Bradley but swap occasionally with Rehab RI. Interestingly, grouping by different seasons at Rhode Island Hospital did not yield any admission type other than emergency to be more common. As a trauma center, these results are likely expected. It was interesting that when grouping urgent vs elective at Bradley Hospital, we find that the length of stay is shorter for those who choose to admit themselves versus those who are required to go urgently. This likely corresponds with the type of care these individuals require. Individuals with elective admissions are likely transferred to outpatient care faster. I then decided to investigate the ages of patients variable further. This yielded results showing that average stay for all age groups (child, teens, and adults) is longest when admission type is trauma or urgent. Our calculations show that adults are admitted most in December and January which corresponds with the peak of flu season in RI and total patient charges being highest for adults during winter months. These visualizations provide insights into the nature of admissions for different patients, hospitals, and admission types.**
+**For the data visualization section of my midterm, I focused on metrics that provided vital insights into specific subsets of admissions statistics. First, I created a bar graph showing that the average total charges for male patients is higher than that of female patients. I thought it was interesting that the charges for male patients was higher on average and this led me to question what factors may have contributed to this phenomena. One visualization I created was a distribution of box plots that showed that the distribution of the ages of male patients is skewed slightly older than that of female patients. This may contribute to the higher overall average total charges because the older ages may contribute to necessity for more significant treatments. A smooth plot of age data shows that between 40 and 80 years, we see a peak in the total patients charges. Thus, older age is associated with having higher hospital charges. A grouped bar chart of the length of stays by gender at the different state providers shows that the length of stays in the hospital of male patients tends to be longer than that of female patients. The longest stays typically occur at hospitals that require long-term care such as mental health facilities (Bradley and Butler) and rehab centers (Rehab Rhode Island). Thus, this likely contributes to the rise in total costs that male patients have because stays in these facilities necessitate long term treatment options. I was also interested in investigating the specific types of admissions that occur within major hospitals in RI. I filtered my data to investigate Bradley, Rehab of Rhode Island, and Rhode Island Hospital. This revealed urgent admission were most common at Bradley (this make sense given this is a mental health facility, elective admission was most common at Rehab RI (this corresponds with the nature of this type of facility), and emergency admission was most common at Rhode Island Hospital (this facility is a trauma center). Our bar race of admissions shows that over the 12 months of the year, the longest average admissions are primarily are Bradley but swap occasionally with Rehab RI. Interestingly, grouping by different seasons at Rhode Island Hospital did not yield any admission type other than emergency to be more common. As a trauma center, these results are likely expected. It was interesting that when grouping urgent vs elective at Bradley Hospital, we find that the length of stay is shorter for those who choose to admit themselves versus those who are required to go urgently. This likely corresponds with the type of care these individuals require. Individuals with elective admissions are likely transferred to outpatient care faster. I then decided to investigate the ages of patients variable further. This yielded results showing that average stay for all age groups (child, teens, and adults) is longest when admission type is trauma or urgent. Our calculations show that adults are admitted most in December and January which corresponds with the peak of flu season in RI and total patient charges being highest for adults during winter months. These visualizations provide insights into the nature of admissions for different patients, hospitals, and admission types.**
 
 ------------------------------------------------------------------------
 
@@ -547,6 +567,8 @@ df1 <- df[, c(input_vars, "target")]
 
     library(rattle)
     fancyRpartPlot(tree_model)
+
+
     ```
 
 ```{r}
@@ -556,6 +578,8 @@ tree_model$variable.importance
 
 ```{r}
 barplot(tree_model$variable.importance)
+
+ggsave(filename = 'VarImp1.png', plot = last_plot())
 ```
 
 ```{r}
@@ -585,12 +609,12 @@ cm$overall[1]
 
 ```{r}
 plot(glm)
-
+ggsave(filename = 'glm1.png', plot = last_plot())
 ```
 
 ```{r}
 plot(fda)
-
+ggsave(filename = 'fda1.png', plot = last_plot())
 ```
 
 1.  Plot the comparison of the models in 3.
@@ -599,6 +623,7 @@ plot(fda)
     results <- resamples(list('Flexible Discriminant Analysis' = fda,
                               'Generalized Linear Model' = glm))
     bwplot(results)
+
     ```
 
 2.  What is your final selection for the model? Test the accuracy of your final model on the test data.
@@ -662,6 +687,8 @@ tree_model <- rpart(target2 ~ ., data = df_train,
 
 library(rattle)
 fancyRpartPlot(tree_model)
+
+ggsave(filename = 'decisiontree2.png', plot = gg)
 ```
 
 ```{r}
@@ -691,16 +718,20 @@ fda <- train(target2~., data=df_train,
 
 ```{r}
 plot(glm)
+
 ```
 
 ```{r}
 plot(fda)
+
+
 ```
 
 ```{r}
 results <- resamples(list('Flexible Discriminant Analysis' = fda,
                           'Generalized Linear Model' = glm))
 bwplot(results)
+
 
 ```
 

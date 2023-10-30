@@ -23,7 +23,7 @@
 
 ### Midterm 
 - [Midterm Qmd File](MidtermProject.html)
-- [Midterm Slides]
+- [Midterm Slides](MidtermProjectSlides.html)
 
 ### Plots
 

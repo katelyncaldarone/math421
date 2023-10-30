@@ -1,25 +1,97 @@
 ---
-title: "Midterm Project Slides"
+title: "MATH 421: RIDOH Hospital Data"
 author: "Katelyn Caldarone"
-format: revealjs
+format:
+  revealjs:
+    theme: "solarized"
 editor: visual
 ---
 
-## Quarto
+# Data Visualization - Patient Specific
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+# Plot #1 ![](MidtermPlot1.png)
 
-## Bullets
+# Plot #2 ![](MidtermPlot8.png)
 
-When you click the **Render** button a document will be generated that includes:
+# Plot #3 ![](MidtermPlot3.png)
 
--   Content authored with markdown
--   Output from executable code
+# Plot #4 ![](MidtermPlot2.png)
 
-## Code
+# Data Visualization - Provider Specific
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+# Plot #5 ![](MidtermPlot4.png)
 
-```{r}
-1 + 1
+# Plot #6
+
+# ![](MidtermBarsRace.gif){width="130%"}
+
+# Plot #7 ![](MidtermPlot7.png)
+
+# Plot #8 ![](MidtermPlot5.png)
+
+# Data Visualization - Age Group Specific
+
+# Plot #9 ![](MidtermPlot9.png)
+
+# Plot #10 ![](MidtermPlot10.png)
+
+# Plot #11 ![](MidtermPlot6.png)
+
+# Predictive Models
+
+# Decision Tree: Patient Charges ![](DecisionTree1.png)
+
+# Barplot Variable Importance ![](VarImp1.png)
+
+# Model Training
+
+# GLM ![](glm1.png)
+
+# FDA ![](fda1.png)
+
+# GLM vs FDA: Model Comparison ![](modelComparion1.png)
+
+# Final Model Selection - FDA
+
+```{r, eval = FALSE, echo=TRUE}
+pred <- predict(fda, df1_test)
+cm <- confusionMatrix(data = pred, 
+                      reference = df1_test$target, 
+                      positive = "high")
+cm$overall[1]
+
+Accuracy 0.7922753 
 ```
+
+# New Target Variable
+
+```{r, eval = FALSE, echo=TRUE}
+meanLOS <- mean(df$los)
+df$target2 <- ifelse(df$los < meanLOS, "short", "long")
+```
+
+# Decision Tree: LOS ![](decisiontree2.png)
+
+# Barplot Variable Importance ![](varimp2.png)
+
+# GLM vs FDA Model Comparison ![](modelComparison2.png)
+
+# GLM ![](glm2.png)
+
+# FDA ![](fda2.png)
+
+# Final Model Selection - FDA
+
+```{r, eval = FALSE, echo=TRUE}
+pred <- predict(fda, df_test)
+cm <- confusionMatrix(data = pred, 
+                      reference = df_test$target2, 
+                      positive = "long")
+cm$overall[1]
+
+Accuracy 0.7583479
+```
+
+# Challenges & Solutions
+
+# Thank you!
