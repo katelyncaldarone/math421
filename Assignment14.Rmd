@@ -212,3 +212,240 @@ d %>% conf_mat(pred, obs) %>% autoplot
 ## Question
 
 Collect data from Reddit to do text mining (word clouds, sentiment analysis and modelling) for at least two text variables. 
+
+## Data Collection - Dogs Reddit 
+```{r}
+library(RedditExtractoR) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+
+df <- find_thread_urls(sort_by="new", subreddit = 'dogs')
+```
+
+```{r}
+write_csv(df, "dogs.csv")
+```
+
+```{r}
+library(RedditExtractoR) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+df <- read_csv("dogs.csv")
+```
+
+## Data Wrangling 
+
+```{r}
+df$date_time = as.POSIXct(df$timestamp)
+df = drop_na(df)
+
+# Create a time variable
+df$time = format(as.POSIXct(df$date_time), format = "%H:%M:%S")
+
+# change time to hours
+df$hours = as.numeric(hms(df$time), "hours")
+hist(df$hours)
+```
+# Categorical Variables for Analysis 
+```{r}
+df$activity <- case_when(df$comments < 50 ~ 'Low Activity', TRUE ~ 'High Activity')
+
+df$day_night = case_when(((df$hours >= 7)&(df$hours<=17))~ "day",
+                         TRUE ~ "night")
+```
+
+# Word Clouds 
+```{r}
+df %>% 
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>% 
+  head(20) %>% 
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = '', x = 'Frequency')
+```
+```{r}
+# Word Cloud using df$activity 'Low Activity'
+
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  filter(activity == 'Low Activity') %>%
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  filter(nchar(word)>1, word!="college") %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+```
+```{r}
+#Word Cloud using df$activity 'High Activity' 
+
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  filter(activity == 'High Activity') %>%
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  filter(nchar(word)>1, word!="college") %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+```
+
+```{r}
+df %>%
+    unnest_tokens(input = title, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(activity, word, sort = TRUE) %>%
+    group_by(activity) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(activity) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(activity, n, fill=sentiment))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency', x ='')
+```
+
+```{r}
+#Training a model to determine the activity of a reddit thread based on the length of its title.
+
+library(caret)
+library(themis)
+library(textrecipes)
+library(tidyverse)
+
+
+# Select data and set target 
+df <- df %>% 
+  mutate(target = activity) %>% 
+  select(target, title) 
+
+# Convert text data to numeric variables
+a <- recipe(target~title,
+       data = df) %>% 
+  step_tokenize(title) %>% 
+  step_tokenfilter(title, max_tokens = 100) %>% 
+  step_tfidf(title) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_smote(target) %>% 
+  prep()
+df <- juice(a)
+
+# Using Caret for modeling
+set.seed(12345)
+splitIndex <- createDataPartition(df$target, p = .7, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+forest_ranger <- train(target~., data=df_train, 
+                        method = "ranger")
+
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target)
+cm$overall[1]
+
+d = data.frame(pred = pred, obs = df_test$target)
+library(yardstick)
+d %>% conf_mat(pred, obs) %>% autoplot
+```
+
+```{r}
+# Word Cloud using df$day_night 'day'
+
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  filter(day_night == 'day') %>%
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  filter(nchar(word)>1, word!="college") %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+```
+
+```{r}
+# Word Cloud using df$day_night 'night'
+
+library(wordcloud) 
+pal <- brewer.pal(8,"Dark2")
+
+df %>%
+  filter(day_night == 'night') %>%
+  unnest_tokens(input = title, output = word) %>% 
+  anti_join(get_stopwords()) %>% 
+  count(word, sort = TRUE) %>%
+  filter(nchar(word)>1, word!="college") %>% 
+  with(wordcloud(word, n, random.order = FALSE, max.words = 50, colors=pal))
+```
+```{r}
+df %>%
+    unnest_tokens(input = title, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(day_night, word, sort = TRUE) %>%
+    group_by(day_night) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(day_night) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(day_night, n, fill=sentiment))+geom_col(position = 'dodge')+
+    labs(y='Relative Frequency', x ='')
+```
+```{r}
+#Training a model to determine whether a reddit post was posted during the day or night based on its text.
+
+library(caret)
+library(themis)
+library(textrecipes)
+library(tidyverse)
+
+
+# Select data and set target 
+df <- df %>% 
+  mutate(target = day_night) %>% 
+  select(target, text) 
+
+# Convert text data to numeric variables
+a <- recipe(target~text,
+       data = df) %>% 
+  step_tokenize(text) %>% 
+  step_tokenfilter(text, max_tokens = 100) %>% 
+  step_tfidf(text) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_smote(target) %>% 
+  prep()
+df <- juice(a)
+
+# Using Caret for modeling
+set.seed(12345)
+splitIndex <- createDataPartition(df$target, p = .7, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+forest_ranger <- train(target~., data=df_train, 
+                        method = "ranger")
+
+pred <- predict(forest_ranger, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target)
+cm$overall[1]
+
+d = data.frame(pred = pred, obs = df_test$target)
+library(yardstick)
+d %>% conf_mat(pred, obs) %>% autoplot
+```
+
+
