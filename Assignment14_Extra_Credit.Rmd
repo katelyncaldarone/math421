@@ -26,3 +26,8 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 -------
 
 Following [this document](https://www.tidytextmining.com/nasa) to plot a network of words for one of the text datasets.
+
+```{r}
+
+```
+
