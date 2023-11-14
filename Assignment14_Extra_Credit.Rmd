@@ -28,6 +28,151 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 Following [this document](https://www.tidytextmining.com/nasa) to plot a network of words for one of the text datasets.
 
 ```{r}
+library(tidyverse)
+library(tidytext)
+library(knitr)
+library(dplyr)
+
+df<- read_csv('netflix_titles.csv')
+
+head(df)
+```
+
+```{r}
+class(df$title)
+class(df$description)
+class(df$listed_in)
+```
+```{r}
+netflix_titles <- tibble(id = df$show_id, title = df$title)
+
+netflix_titles
+```
+
+```{r}
+netflix_desc <- tibble(id = df$show_id, description = df$description)
+netflix_desc %>%
+  select(description) %>%
+  sample_n(15)
+```
+```{r}
+netflix_lists <- tibble(id = df$show_id, list = df$listed_in)
+netflix_lists
+```
+
+```{r}
+library(tidytext)
+
+netflix_titles <- netflix_titles %>% 
+  unnest_tokens(word, title) %>% 
+  anti_join(stop_words)
+
+netflix_desc <- netflix_desc %>% 
+  unnest_tokens(word, description) %>% 
+  anti_join(stop_words)
+
+netflix_lists <- netflix_lists %>% 
+  unnest_tokens(word, list) %>% 
+  anti_join(stop_words)
 
 ```
+
+
+```{r}
+netflix_titles
+
+netflix_desc
+
+netflix_lists
+```
+
+```{r}
+netflix_titles %>%
+  count(word, sort = TRUE)
+```
+
+```{r}
+netflix_desc %>%
+  count(word, sort = TRUE)
+```
+
+```{r}
+netflix_lists %>%
+  count(word, sort = TRUE)
+```
+
+```{r}
+library(widyr)
+
+title_word_pairs <- netflix_titles %>% 
+  pairwise_count(word, id, sort = TRUE, upper = FALSE)
+
+title_word_pairs
+```
+
+```{r}
+library(ggplot2)
+library(igraph)
+library(ggraph)
+
+set.seed(1234)
+title_word_pairs %>%
+  filter(n >= 7) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
+  theme_void()
+```
+
+```{r}
+text_word_pairs <- netflix_desc %>% 
+  pairwise_count(word, id, sort = TRUE, upper = FALSE)
+
+text_word_pairs
+```
+
+```{r}
+library(ggplot2)
+library(igraph)
+library(ggraph)
+
+set.seed(1234)
+text_word_pairs %>%
+  filter(n >= 30) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
+  theme_void()
+```
+
+```{r}
+list_word_pairs <- netflix_lists %>% 
+  pairwise_count(word, id, sort = TRUE, upper = FALSE)
+
+list_word_pairs
+```
+```{r}
+library(ggplot2)
+library(igraph)
+library(ggraph)
+
+set.seed(1234)
+list_word_pairs %>%
+  filter(n >= 200) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
+  theme_void()
+```
+
+
 
