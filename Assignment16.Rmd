@@ -1,0 +1,281 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 16: Writing a function - Loop"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment16.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+-------
+
+1. Write the following function. Give examples to test your function.
+
+- Input: a data frame
+
+- Output: a data frame with all the missing of numeric variables replaced by the associated means.
+
+Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#28)
+
+```{r}
+numeric_impute <- function(d) {
+  for (i in 1:ncol(d)) {
+    if (is.numeric(d[[i]])) {
+      d[[i]][is.na(d[[i]])] <- mean(d[[i]], na.rm = TRUE)
+    }
+  }
+  return(d)
+}
+```
+
+```{r}
+#Test numeric_impute function.
+library(tidyverse)
+df  <- read_csv('adult_census.csv')
+
+colSums(is.na(df))
+```
+```{r}
+df1 <- numeric_impute(df)
+colSums(is.na(df1))
+```
+
+
+-------
+
+2. Write the following function. Give examples to test your function.
+
+- Input: a data frame
+
+- Output: a data frame with all the missing of variables replaced by the associated means (for numeric variables) or modes (for non-numeric variables).
+
+Hint: Use If-statement to combine the function in Problem 1 and the function in [this example](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#28)
+
+```{r}
+impute_na <- function(d) {
+  for (i in 1:ncol(d)) {
+    if (is.numeric(d[[i]])) {
+      d[[i]][is.na(d[[i]])] <- mean(d[[i]], na.rm = TRUE)
+    } else if (any(!is.na(d[[i]]))) {
+      levels <- unique(d[[i]])
+      mode_val <- levels[which.max(tabulate(match(d[[i]], levels)))]
+      d[[i]][is.na(d[[i]])] <- mode_val
+    }
+  }
+  return(d)
+}
+```
+
+```{r}
+#Test impute_na function.
+library(tidyverse)
+df  <- read_csv('adult_census.csv')
+
+colSums(is.na(df))
+```
+```{r}
+dfNew <- impute_na(df)
+colSums(is.na(dfNew))
+```
+
+-------
+
+3. Write the following function. Give examples to test your function.
+
+- Input: a data frame
+
+- Output: Bar plots of all non-numeric variables
+
+Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#33)
+
+```{r}
+bar_plot <- function(d) {
+  library(ggplot2)
+  for (i in 1:ncol(d)) {
+    if (!is.numeric(d[[i]])) {
+      print(ggplot(d, aes_string(x = names(d)[i])) +
+            geom_bar() +
+            labs(x = names(d)[i]))
+    }
+  }
+}
+```
+
+```{r}
+#Test bar_plot function.
+library(tidyverse)
+df <- read_csv('adult_census.csv')
+
+bar_plot(df)
+```
+```{r}
+#Test bar_plot function.
+library(tidyverse)
+df <- read_csv('adult_census.csv')
+
+bar_plot(df)
+```
+
+-------
+
+4. Write the following function. Give examples to test your function.
+
+- Input: a data frame
+
+- Output: all possible the bar plots of a non-numeric variable filled by a non-numeric variable.
+
+Hint: [Similar function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#40)
+
+```{r}
+bar_plots_filled <- function(d) {
+  library(ggplot2)
+  non_numeric_vars <- sapply(d, function(x) !is.numeric(x))
+  non_numeric_cols <- names(d)[non_numeric_vars]
+  
+  for (col1 in non_numeric_cols) {
+    for (col2 in non_numeric_cols) {
+      if (col1 != col2) {
+        plot_data <- d %>%
+          group_by(!!sym(col1), !!sym(col2)) %>%
+          summarise(count = n())
+        
+        print(ggplot(plot_data, aes(x = !!sym(col1), y = count, fill = !!sym(col2))) +
+                geom_bar(position = "dodge", stat = "identity") +
+                labs(x = col1, y = "Count", fill = col2) +
+                theme_minimal())
+      }
+    }
+  }
+}
+
+```
+
+```{r}
+#Test the bar_plots_filled function
+
+df <- read_csv('adult_census.csv')
+
+bar_plots_filled(df)
+```
+
+-------
+
+5. Write the following function. Give examples to test your function.
+
+- Input: a data frame
+
+- Output: 
+
+  - all possible the bar plots of a non-numeric variable filled by a non-numeric variable.
+  
+  - all possible the density plots of a numeric variable colored by a non-numeric variable
+  
+  - all possible the scatter plots.
+
+Hint: Combine [this function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#37), [this function](https://bryantstats.github.io/math421/gganimate/18_writing_functions.html#40), and the function in Question 4. One way to combine is creating a new function, `quick_plot`, and call these three functions within `quick_plot`. 
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+bar_plots_filled <- function(d) {
+  library(ggplot2)
+  non_numeric_vars <- sapply(d, function(x) !is.numeric(x))
+  non_numeric_cols <- names(d)[non_numeric_vars]
+  
+  for (col1 in non_numeric_cols) {
+    for (col2 in non_numeric_cols) {
+      if (col1 != col2) {
+        plot_data <- d %>%
+          group_by(!!sym(col1), !!sym(col2)) %>%
+          summarise(count = n())
+        
+        print(ggplot(plot_data, aes(x = !!sym(col1), y = count, fill = !!sym(col2))) +
+                geom_bar(position = "dodge", stat = "identity") +
+                labs(x = col1, y = "Count", fill = col2) +
+                theme_minimal())
+      }
+    }
+  }
+}
+
+
+# Example usage:
+# bar_plots_filled(your_data_frame)
+
+
+# Example usage:
+# bar_plots_filled(your_data_frame)
+
+
+#Density Plots
+density_plots <- function(d) {
+  numeric_vars <- sapply(d, is.numeric)
+  numeric_cols <- names(d)[numeric_vars]
+  non_numeric_vars <- sapply(d, function(x) !is.numeric(x))
+  non_numeric_cols <- names(d)[non_numeric_vars]
+  
+  for (num_col in numeric_cols) {
+    for (non_num_col in non_numeric_cols) {
+      print(ggplot(d, aes(x = !!sym(num_col), fill = !!sym(non_num_col))) +
+              geom_density(alpha = 0.5) +
+              labs(x = num_col, fill = non_num_col) +
+              theme_minimal())
+    }
+  }
+}
+
+#Scatterplots
+scatter_plots <- function(d) {
+  numeric_vars <- sapply(d, is.numeric)
+  numeric_cols <- names(d)[numeric_vars]
+  non_numeric_vars <- sapply(d, function(x) !is.numeric(x))
+  non_numeric_cols <- names(d)[non_numeric_vars]
+  
+  for (num_col1 in numeric_cols) {
+    for (num_col2 in numeric_cols) {
+      if (num_col1 != num_col2) {
+        print(ggplot(d, aes(x = !!sym(num_col1), y = !!sym(num_col2))) +
+                geom_point() +
+                labs(x = num_col1, y = num_col2) +
+                theme_minimal())
+      }
+    }
+  }
+}
+
+#Function quick_plot
+quick_plot <- function(d) {
+  bar_plots_filled(d)
+  density_plots(d)
+  scatter_plots(d)
+}
+```
+
+```{r}
+#Test quick_plot function
+
+df <- read_csv('adult_census.csv')
+
+suppressWarnings(quick_plot(df))
+```
+
+
+
+
