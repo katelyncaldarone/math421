@@ -24,7 +24,7 @@
 -   [Assignment 14](Assignment14.html)
 -   [Assignment 14 - Extra Credit](Assignment14_Extra_Credit.html)
 -   [Assignment 15](Assignment15.html)
--   [Assignment 16](Assignment16.html.)
+-   [Assignment 16](Assignment16.html)
 
 ### Midterm 
 - [Midterm Qmd File](MidtermProject.html)
