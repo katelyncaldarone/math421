@@ -31,6 +31,9 @@
 - [Midterm Qmd File](MidtermProject.html)
 - [Midterm Slides](MidtermProjectSlides.html)
 
+### Final Project 
+- [Question #1](FinalProject_Question1.html)
+
 ### Plots
 
 -   [Link to Assignment 7 Plot](Race_by_Gender.png)
