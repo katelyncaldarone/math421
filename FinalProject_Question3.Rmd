@@ -1,0 +1,20 @@
+---
+title: "FinalProject_Question3"
+author: "Katelyn Caldarone"
+date: "2023-12-01"
+output: html_document
+---
+```{r}
+install.packages('shiny')
+install.packages('packrat')
+install.packages('rsconnect')
+```
+```{r}
+library(rsconnect)
+library(shiny)
+library(packrat)
+```
+```{r}
+rsconnect::setAccountInfo(name='katelyncaldarone', token='618CCC36A0A0CC957B3548A60FC07B9A', secret='nsQNf9J6QZMa1I0J55Nekk7EnbrVz7mwurdqWxoK')
+```
+

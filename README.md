@@ -28,11 +28,11 @@
 -   [Assignment 17](Assignment17.html)
 
 ### Midterm 
-- [Midterm Qmd File](MidtermProject.html)
-- [Midterm Slides](MidtermProjectSlides.html)
+-   [Midterm Qmd File](MidtermProject.html)
+-   [Midterm Slides](MidtermProjectSlides.html)
 
 ### Final Project 
-- [Question #1](FinalProject_Question1.html)
+
 
 ### Plots
 
