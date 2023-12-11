@@ -1,0 +1,90 @@
+
+---
+title: "Adult Census - Date Range"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    logo: logo.png
+    source_code: embed
+    social: menu
+
+runtime: shiny
+---
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(flexdashboard)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(knitr)
+library(DT)
+library(lubridate)
+library(shiny)
+df <- read_csv('adult_census.csv')
+
+df <- drop_na(df, age)
+df <- drop_na(df, sex)
+df$date = mdy(df$date)
+df$income = factor(df$income)
+df$sex = factor(df$sex)
+
+census_race <- unique(df$race)
+
+```
+
+{.sidebar}
+=======================================================================
+
+- The adult census dataset includes demographic information from 1000s of individuals.It is typically used to predict income earning level based on provided demographic information. Select the input for the plots.
+- Please note, for the purposes of this example, the dates are fictional and not representative of real data.
+
+ 
+```{r}
+dateRangeInput(inputId = "date_input", 
+               label = h2("Date Range"), 
+               start = min(df$date), 
+               end = max(df$date),
+               min = min(df$date), 
+               max = max(df$date))
+```
+
+Main Tab 1
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Density Plot
+
+```{r}
+renderPlotly({
+  p1 <- df %>% 
+    filter(date > input$date_input[1], date < input$date_input[2]) %>%
+    ggplot(aes(x = hours.per.week, color = income)) +
+    geom_density()
+  ggplotly(p1)
+})
+
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Bar Plot
+
+```{r}
+renderPlotly({
+  p2 <- df %>% 
+    filter(date > input$date_input[1], date < input$date_input[2]) %>% 
+    ggplot(aes(x = sex, fill = income)) +
+    geom_bar() +
+    labs(
+         x = "Gender",
+         y = "Count") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +  # Rotate x-axis labels
+    theme(plot.margin = margin(b = 50))  # Increase bottom margin
+
+  ggplotly(p2)
+})
+```

@@ -32,6 +32,7 @@
 -   [Midterm Slides](MidtermProjectSlides.html)
 
 ### Final Project 
+-   [Final Project - All Files](FinalProject_BuildingInteractiveDB.html)
 
 
 ### Plots

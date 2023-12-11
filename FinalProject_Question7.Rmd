@@ -1,0 +1,82 @@
+---
+title: "Adult Census - Radio Button"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+    social: menu
+
+runtime: shiny
+---
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(knitr)
+library(DT)
+df <- read_csv('adult_census.csv')
+df <- drop_na(df, age)
+df <- drop_na(df, sex)
+df <- drop_na(df, workclass)
+df$income = factor(df$income)
+df$sex = factor(df$sex)
+
+census_race <- unique(df$race)
+```
+
+{.sidebar}
+=======================================================================
+
+The adult census dataset includes demographic information from 1000s of individuals.It is typically used to predict income earning level based on provided demographic information. Select the input for the plots.
+
+```{r}
+radioButtons(inputId = "workclass_input", 
+             label = h2("Select Work Class"),
+             choices = c('Federal-gov','Local-gov','Never-worked','Private',
+                         'Self-emp-inc','Self-emp-not-inc','State-gov',
+                         'Without-pay'),
+             inline = TRUE,
+             selected = 'Federal-gov')
+```
+
+Main Tab 1
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Density Plot
+
+```{r}
+renderPlotly({
+p1 <- df %>% 
+    filter(workclass == input$workclass_input) %>% 
+    ggplot(aes(x=age, color=income))+
+    geom_density()
+  ggplotly(p1)
+})
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Bar Plot
+
+```{r}
+renderPlotly({
+  p2 <- df %>% 
+    filter(workclass == input$workclass_input) %>% 
+    ggplot(aes(x = sex, fill = income)) +
+    geom_bar() +
+    labs(
+         x = "Gender",
+         y = "Count") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +  # Rotate x-axis labels
+    theme(plot.margin = margin(b = 50))  # Increase bottom margin
+
+  ggplotly(p2)
+})
+```

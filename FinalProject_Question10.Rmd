@@ -1,0 +1,440 @@
+
+---
+title: "Shiny Flex Dashboard: Hotel Bookings Data"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+    social: menu
+
+runtime: shiny
+---
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(knitr)
+library(DT)
+library(flextable)
+library(shiny)
+df <- read_csv('hotel_booking.csv')
+df <- drop_na(df, lead_time)
+df <- drop_na(df, reservation_status_date)
+
+df$status <- case_when(df$is_canceled == 0 ~ 'Not Cancelled', TRUE ~ 'Cancelled')
+
+df$hotel = factor(df$hotel)
+df$market_segment = factor(df$market_segment)
+df$deposit_type = factor(df$deposit_type)
+df$status = factor(df$status)
+
+hotel_type <- unique(df$hotel)
+```
+
+{.sidebar}
+=======================================================================
+The hotel bookings dataset contains 119,390 observations for a city hotel and a resort hotel.Each observation represents a hotel booking. There are various factors contributing to whether a hotel booking is kept or cancelled. 
+
+```{r}
+selectInput(inputId = "hotel_input", 
+            label = h3("Select Hotel Type"),
+            choices = hotel_type, 
+            selected = 'Resort Hotel')
+
+checkboxGroupInput(inputId = "market_segment_input", 
+                   label = h3("Market Segment"),
+                   choices = unique(df$market_segment), 
+                   inline = TRUE,
+                   selected = 'Groups')
+
+sliderInput(inputId = "lead_time_input",
+            label = h2("Select Lead Time Before Stay Input"),
+            min = min(df$lead_time, na.rm=TRUE),
+            max = max(df$lead_time, na.rm=TRUE),
+            value= c(50, 70))
+
+radioButtons(inputId = "deposit_input", 
+             label = h2("Select Deposit Type Input"),
+             choices = c('No Deposit', 'No Refund', 'Refundable'),
+             inline = TRUE,
+             selected = 'No Deposit')
+
+dateRangeInput(inputId = "date_input", 
+               label = h2("Date Range"), 
+               start = min(df$reservation_status_date), 
+               end = max(df$reservation_status_date),
+               min = min(df$reservation_status_date), 
+               max = max(df$reservation_status_date))
+```
+
+Main Tab 1
+=======================================================================
+
+Column {data-width=500, .tabset}
+-----------------------------------------------------------------------
+
+### Column Tab 1
+
+```{r}
+df
+```
+
+### Column Tab 2 
+```{r}
+kable(head(df))
+```
+
+
+### Column Tab 3
+```{r}
+datatable(df, options = list(
+  pageLength = 25
+))
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Why do trends in cancellations cause challenges for hotels?
+
+- A significant challenge of hotel management involves the tendency for guests to make a reservation and cancel at the last minute. A 2022 study by Revenue Hub found than 1 in 5 hotel bookings were being cancelled.
+- Common cancellation trends include trip stacking, cost of living, socio-economic pressures, and cancelling to re-book.
+
+```{r}
+image <- 'https://www.siteminder.com/wp-content/uploads/2023/11/Hotel-Cancellation-Policy-1.png'
+```
+```{r}
+HTML(sprintf('<div style="overflow:auto; max-height: 200px;"><img src="%s" style="width:100%%; height:auto;"></div>', image))
+
+```
+<center><img src="`r image`"></center>
+
+Main Tab 2
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Bar Plot
+```{r}
+renderPlotly({
+    p1 <- df %>% 
+      filter(hotel == input$hotel_input) %>%
+      filter(market_segment == input$market_segment_input)%>%
+      filter(lead_time > input$lead_time_input[1],
+             lead_time < input$lead_time_input[2]) %>%
+      filter(deposit_type == input$deposit_input) %>%
+      filter(reservation_status_date > input$date_input[1],
+             reservation_status_date < input$date_input[2]) %>%
+      ggplot()+
+      geom_bar(mapping=aes(x=hotel, fill=status), 
+           position = 'dodge')+
+       labs(title = "Count of Reservations by Hotel Type and Status",
+         x = "Hotel Type",
+         y = "Count",
+         color = "Booking Status")+
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),  
+          plot.title = element_text(size = 12))
+    ggplotly(p1) 
+})
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Scatter Plot 
+
+```{r}
+renderPlotly({
+p2 <- df %>% 
+      filter(hotel == input$hotel_input) %>%
+      filter(market_segment == input$market_segment_input)%>%
+      filter(lead_time > input$lead_time_input[1],
+             lead_time < input$lead_time_input[2]) %>%
+      filter(deposit_type == input$deposit_input) %>%
+      filter(reservation_status_date > input$date_input[1],
+             reservation_status_date < input$date_input[2]) %>%
+    ggplot(aes(x = lead_time, y = adr, color = status))+
+    geom_point()+
+    geom_line()+
+      labs(title = "Lead Time vs ADR by Status",
+         x = "Lead Time (Days)",
+         y = "Average Daily Room Rate",
+         color = "Status")
+  ggplotly(p2)
+})
+```
+
+Main Tab 3
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Smooth Plot
+
+```{r}
+renderPlotly({
+    p3 <- df %>% 
+      filter(hotel == input$hotel_input) %>%
+      filter(market_segment == input$market_segment_input)%>%
+      filter(lead_time > input$lead_time_input[1],
+             lead_time < input$lead_time_input[2]) %>%
+      filter(deposit_type == input$deposit_input) %>%
+      filter(reservation_status_date > input$date_input[1],
+             reservation_status_date < input$date_input[2]) %>%
+      ggplot(aes(x = lead_time, y = booking_changes, color = status)) +
+      geom_smooth()+
+       labs(title = "Lead Time vs Booking Changes by Status",
+         x = "Lead Time (Days)",
+         y = "Number of Booking Changes",
+         color = "Booking Status")
+    ggplotly(p3) 
+  })
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Bar Plot
+
+```{r}
+renderPlotly({
+    p4 <- df %>% 
+      filter(hotel == input$hotel_input) %>%
+      filter(market_segment == input$market_segment_input)%>%
+      filter(lead_time > input$lead_time_input[1],
+             lead_time < input$lead_time_input[2]) %>%
+      filter(deposit_type == input$deposit_input) %>%
+      filter(reservation_status_date > input$date_input[1],
+             reservation_status_date < input$date_input[2]) %>%
+      ggplot(aes(x = customer_type, fill = status)) +
+      geom_bar()+
+       labs(title = "Reservation Status by Customer Type",
+         x = "Type of Customer",
+         y = "Count",
+         color = "Booking Status")+
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),  
+          plot.title = element_text(size = 12))
+    ggplotly(p4) 
+  })
+```
+
+Main Tab 4
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+### Density Plot
+
+```{r}
+renderPlotly({
+p5 <- df %>% 
+      filter(hotel == input$hotel_input) %>%
+      filter(market_segment == input$market_segment_input)%>%
+      filter(lead_time > input$lead_time_input[1],
+             lead_time < input$lead_time_input[2]) %>%
+      filter(deposit_type == input$deposit_input) %>%
+      filter(reservation_status_date > input$date_input[1],
+             reservation_status_date < input$date_input[2]) %>%
+    ggplot(aes(x=adr, color=status))+
+    geom_density()+ 
+      labs(title = "Density Plot of ADR by Status",
+         x = "Average Daily Room Rate",
+         y = "Density",
+         color = "Status")
+  ggplotly(p5)
+})
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### How can data insights help hotels manage reservation cancellations more effectively?
+
+- Experts suggest that utilizing technology to achieve increased consumer insight, understanding cancellation and booking behavior, and implementing competent retention strategies is essential to alleviate the challenges of the rise in cancellation trends.
+- By monitoring occupancy rates, executing accurate forecasting models, and having a backup plan in place for when cancellation inevitably happen, hotels can be prepared for cancellation events.
+
+```{r}
+image <- 'https://page.mysoftinn.com/hs-fs/hubfs/2-png-Dec-23-2021-01-11-43-46-AM.png?width=756&name=2-png-Dec-23-2021-01-11-43-46-AM.png'
+```
+```{r}
+HTML(sprintf('<div style="overflow:auto; max-height: 200px;"><img src="%s" style="width:100%%; height:auto;"></div>', image))
+
+```
+<center><img src="`r image`"></center>
+
+Main Tab 5
+=======================================================================
+Column {data-width=500, .tabset}
+-----------------------------------------------------------------------
+```{r, include=FALSE}
+library(RedditExtractoR) 
+library(tidytext)
+library(ggpubr) 
+library(tidyverse) 
+library(knitr)
+library(lubridate)
+
+#df2 <- find_thread_urls(sort_by="new", subreddit = 'hotels')
+
+#write_csv(df2, "hotels.csv")
+
+df2 <- read_csv("hotels.csv")
+
+df2$date_time = as.POSIXct(df2$timestamp)
+df2 = drop_na(df2)
+
+# Create a time variable
+df2$time = format(as.POSIXct(df2$date_time), format = "%H:%M:%S")
+
+# change time to hours
+df2$hours = as.numeric(hms(df2$time), "hours")
+
+df2$activity <- case_when(df2$comments < 50 ~ 'Low Activity', TRUE ~ 'High Activity')
+```
+
+### Column Tab 1 
+```{r}
+datatable(df2, options = list(
+  pageLength = 25
+))
+```
+
+### Column Tab 2 
+```{r}
+library(wordcloud)
+library(wordcloud2)
+pal <- brewer.pal(8,"Dark2")
+renderPlot({
+  wordcloud_data <- df2 %>%
+    filter(activity == 'Low Activity') %>%
+    unnest_tokens(input = text, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(word, sort = TRUE) %>%
+    filter(nchar(word) > 1, word != "hotel") %>% 
+    head(25)
+
+  ggplot(wordcloud_data, aes(x = reorder(word, n), y = n)) +
+    geom_col() +
+    labs(y = 'Frequency', x = 'Word') +
+    theme_light() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
+    ggtitle("Word Frequencies for Low Activity") 
+})
+```
+
+### Column Tab 3 
+Word Cloud for Low Activity Using Text Input
+```{r}
+library(wordcloud)
+pal <- brewer.pal(8, "Dark2")
+
+renderPlot({
+  wordcloud_data <- df2 %>%
+    filter(activity == 'Low Activity') %>%
+    unnest_tokens(input = text, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(word, sort = TRUE) %>%
+    filter(nchar(word) > 1, word != "hotel") %>% 
+    head(25)
+
+  wordcloud(words = wordcloud_data$word, freq = wordcloud_data$n, 
+            scale=c(3, 0.5), min.freq = 1,
+            max.words = 25, colors = pal, random.order = FALSE,
+            main = "Word Cloud for Low Activity Using Text")
+})
+
+```
+
+### Column Tab 4
+```{r}
+library(wordcloud)
+library(wordcloud2)
+pal <- brewer.pal(8,"Dark2")
+renderPlot({
+  wordcloud_data <- df2 %>%
+    filter(activity == 'High Activity') %>%
+    unnest_tokens(input = text, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(word, sort = TRUE) %>%
+    filter(nchar(word) > 1, word != "hotel") %>% 
+    head(50)
+
+  ggplot(wordcloud_data, aes(x = reorder(word, n), y = n)) +
+    geom_col() +
+    labs(y = 'Frequency', x = 'Word') +
+    theme_light() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
+    ggtitle("Word Frequencies for High Activity") 
+})
+
+```
+
+### Column Tab 5
+Word Cloud for High Activity Using Text Input
+```{r}
+library(wordcloud)
+pal <- brewer.pal(8, "Dark2")
+
+renderPlot({
+  wordcloud_data <- df2 %>%
+    filter(activity == 'High Activity') %>%
+    unnest_tokens(input = text, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(word, sort = TRUE) %>%
+    filter(nchar(word) > 1, word != "hotel") %>% 
+    head(50)
+
+  wordcloud(words = wordcloud_data$word, freq = wordcloud_data$n, 
+            scale=c(3, 0.5), min.freq = 1,
+            max.words = 25, colors = pal, random.order = FALSE,
+            main = "Word Cloud for Low Activity Using Text")
+})
+
+```
+### Column Tab 6
+```{r}
+renderPlot({
+  df2 %>%
+    unnest_tokens(input = title, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(activity, word, sort = TRUE) %>%
+    group_by(activity) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(activity) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(activity, n, fill = sentiment)) +
+    geom_col(position = 'dodge') +
+    labs(y = 'Relative Frequency', x = 'Activity') +  # Add x-axis label
+    scale_fill_manual(values = c("positive" = "green", "negative" = "red"))+
+    ggtitle("Sentiment Analysis by Activity Using Title")
+})
+
+```
+
+### Column Tab 7
+```{r}
+renderPlot({
+  df2 %>%
+    unnest_tokens(input = text, output = word) %>% 
+    anti_join(get_stopwords()) %>% 
+    count(activity, word, sort = TRUE) %>%
+    group_by(activity) %>% 
+    inner_join(get_sentiments("bing")) %>%
+    filter(!is.na(sentiment)) %>%
+    count(sentiment, sort = TRUE) %>% 
+    group_by(activity) %>% 
+    mutate(n = n/sum(n)) %>% 
+    ggplot(aes(activity, n, fill = sentiment)) +
+    geom_col(position = 'dodge') +
+    labs(y = 'Relative Frequency', x = 'Activity') +  # Add x-axis label
+    scale_fill_manual(values = c("positive" = "green", "negative" = "red"))+
+    ggtitle("Sentiment Analysis by Activity Using Text")
+})
+```
